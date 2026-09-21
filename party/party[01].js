@@ -7,15 +7,23 @@
      * PARTY [01]
      * ============================================================
      *
-     * Cette PARTY contient :
+     * STORY:
      *
-     * 01. Arrivée dans l'ascenseur
-     * 02. Ouverture de l'ascenseur
-     * 03. Rencontre avec Nate
-     * 04. Choix du joueur
-     * 05. Bonne route
-     * 06. Route [01.5]
-     * 07. Route [02]
+     * Nate rentre chez lui.
+     * L'ascenseur semble beaucoup plus long que d'habitude.
+     *
+     * Lorsqu'il arrive enfin à son étage, la porte s'ouvre.
+     * Une étrange personne se trouve devant lui.
+     *
+     * La porte commence ensuite à se refermer.
+     *
+     * CHOIX :
+     *
+     * 1. BLOQUER LA PORTE
+     *    -> GOOD ENDING
+     *
+     * 2. LAISSER LA PORTE SE FERMER
+     *    -> BAD ENDING
      *
      * ============================================================
      */
@@ -35,7 +43,7 @@
        ============================================================ */
 
     let dialogueIndex = 0;
-    let goodEndingIndex = 0;
+    let endingIndex = 0;
 
     let phase = "intro";
 
@@ -45,19 +53,21 @@
     let choicesConnected = false;
     let dialogueConnected = false;
 
-    /* ============================================================
-       SAFETY
-       ============================================================ */
+    /*
+     * Typewriter
+     */
 
-    function safeCall(fn, ...args) {
-        try {
-            if (typeof fn === "function") {
-                return fn(...args);
-            }
-        } catch (error) {
-            console.error("[PARTY 01] Erreur :", error);
-        }
-    }
+    let typing = false;
+    let typingTimer = null;
+
+    let currentEntry = null;
+    let currentDisplayedText = "";
+
+    const TYPE_SPEED = 28;
+
+    /* ============================================================
+       UTILS
+       ============================================================ */
 
     function wait(ms) {
         return new Promise(resolve => {
@@ -65,8 +75,43 @@
         });
     }
 
+    function safeCall(fn, ...args) {
+
+        try {
+
+            if (typeof fn === "function") {
+                return fn(...args);
+            }
+
+        } catch (error) {
+
+            console.error(
+                "[PARTY 01] Erreur :",
+                error
+            );
+
+        }
+
+    }
+
+    function playClick() {
+
+        safeCall(
+            window.playClickSound
+        );
+
+    }
+
+    function playHover() {
+
+        safeCall(
+            window.playHoverSound
+        );
+
+    }
+
     /* ============================================================
-       INTRO DIALOGUE
+       INTRO
        ============================================================ */
 
     const introDialogue = [
@@ -74,57 +119,158 @@
         {
             type: "nate",
             name: "Nate",
-            text: "Je suis vraiment fatigué..."
+            text:
+                "Enfin... une journée de plus."
         },
 
         {
             type: "nate",
             name: "Nate",
-            text: "J'ai juste envie de rentrer chez moi."
+            text:
+                "Je pensais vraiment ne jamais réussir à terminer aujourd'hui."
         },
 
         {
             type: "nate",
             name: "Nate",
-            text: "......."
-        },
-
-        {
-            type: "nate",
-            name: "Nate",
-            text: "..........."
+            text:
+                "J'ai juste envie de rentrer chez moi, de fermer la porte et de dormir."
         },
 
         {
             type: "thought",
             text:
-                "(C'est bizarre... je me rappelle pas que ça prenait autant de temps de monter.)"
+                "(Mes jambes sont complètement mortes...)"
         },
 
         {
             type: "nate",
             name: "Nate",
-            text: "......."
+            text:
+                "Allez... encore quelques étages."
         },
 
         {
             type: "nate",
             name: "Nate",
-            text: "J'espère qu'on va bientôt arriver."
+            text:
+                "Je ne devrais même pas avoir à réfléchir autant pour prendre un ascenseur."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(...)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Pourquoi est-ce que ça paraît aussi long ?)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Je suis pourtant déjà monté dans cet ascenseur des centaines de fois."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Quelque chose ne va pas.)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Peut-être que je suis juste trop fatigué."
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Oui... c'est sûrement ça."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(...)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Pourquoi l'ascenseur ne ralentit toujours pas ?)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "J'espère qu'on va bientôt arriver."
         }
 
     ];
 
     /* ============================================================
-       STRANGE PERSON DIALOGUE
+       STRANGE PERSON
        ============================================================ */
 
     const strangePersonDialogue = [
 
         {
+            type: "thought",
+            text:
+                "(Enfin.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(La porte s'ouvre.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(...)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Attends.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Il y a quelqu'un.)"
+        },
+
+        {
             type: "nate",
             name: "Nate",
-            text: "..."
+            text:
+                "Euh..."
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Bonsoir."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Elle ne répond pas.)"
         },
 
         {
@@ -138,31 +284,37 @@
             type: "nate",
             name: "Nate",
             text:
-                "Vous venez d'emménager ?"
-        },
-
-        {
-            type: "nate",
-            name: "Nate",
-            text: "..."
+                "Vous venez d'emménager dans l'immeuble ?"
         },
 
         {
             type: "thought",
             text:
-                "(Elle a quelque chose d'étrange...)"
+                "(Toujours rien.)"
         },
 
         {
             type: "thought",
             text:
-                "(Son apparence est complètement noire.)"
+                "(Elle me regarde.)"
         },
 
         {
             type: "thought",
             text:
-                "(Et... son visage ?)"
+                "(Non... elle ne me regarde pas vraiment.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Ses yeux...)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Pourquoi est-ce que je n'arrive pas à voir son visage ?)"
         },
 
         {
@@ -170,12 +322,49 @@
             name: "Nate",
             text:
                 "Vous allez au même étage que moi ?"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Elle avance.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Un pas.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Puis un autre.)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Euh... vous voulez entrer ?"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(La porte commence à se fermer.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Je dois faire quelque chose.)"
         }
 
     ];
 
     /* ============================================================
-       GOOD ENDING DIALOGUE
+       GOOD ENDING
        ============================================================ */
 
     const goodEndingDialogue = [
@@ -183,7 +372,105 @@
         {
             type: "nate",
             name: "Nate",
-            text: "..."
+            text:
+                "Attendez !"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Je tends rapidement la main vers le bouton.)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Je vais maintenir la porte."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(La porte s'arrête.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(...)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Elle entre.)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Voilà..."
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "C'est bon."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Elle reste silencieuse.)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Je sais que c'est un peu bizarre de demander ça..."
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Mais je ne vous ai vraiment jamais vue dans cet immeuble."
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Vous habitez ici depuis longtemps ?"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Elle tourne lentement la tête vers moi.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Cette fois, je peux voir son visage.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Enfin... je crois.)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "..."
         },
 
         {
@@ -219,12 +506,306 @@
             name: "Nate",
             text:
                 "Ça ne vous dérange pas... ?"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Elle sourit.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Je ne sais pas pourquoi...)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Mais je sens que j'ai fait le bon choix.)"
         }
 
     ];
 
     /* ============================================================
-       DIALOGUE DISPLAY
+       BAD ENDING
+       ============================================================ */
+
+    const badEndingDialogue = [
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "..."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Je ne vais pas attendre.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(La porte se ferme.)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Désolé."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Les portes se referment complètement.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(...)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Enfin."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Je peux enfin rentrer chez moi.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(L'ascenseur recommence à monter.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(...)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Attends.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Pourquoi est-ce qu'il monte encore ?)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "..."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Mon étage est déjà passé.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(L'écran indique un étage que je ne connais pas.)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Non..."
+        },
+
+        {
+            type: "thought",
+            text:
+                "(La lumière de l'ascenseur commence à clignoter.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Puis tout devient noir.)"
+        },
+
+        {
+            type: "nate",
+            name: "Nate",
+            text:
+                "Quelqu'un... ?"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Je peux entendre quelqu'un respirer.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Mais je suis seul.)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Enfin...)"
+        },
+
+        {
+            type: "thought",
+            text:
+                "(Je pensais être seul.)"
+        }
+
+    ];
+
+    /* ============================================================
+       TYPEWRITER
+       ============================================================ */
+
+    function clearTypingTimer() {
+
+        if (typingTimer !== null) {
+
+            clearTimeout(
+                typingTimer
+            );
+
+            typingTimer = null;
+
+        }
+
+    }
+
+    function finishCurrentText() {
+
+        clearTypingTimer();
+
+        typing = false;
+
+        if (
+            DOM &&
+            DOM.dialogueText &&
+            currentEntry
+        ) {
+
+            DOM.dialogueText.textContent =
+                currentEntry.text || "";
+
+        }
+
+        currentDisplayedText =
+            currentEntry
+                ? currentEntry.text || ""
+                : "";
+
+    }
+
+    function typeText(entry) {
+
+        clearTypingTimer();
+
+        currentEntry =
+            entry;
+
+        currentDisplayedText =
+            "";
+
+        typing =
+            true;
+
+        if (
+            DOM &&
+            DOM.dialogueText
+        ) {
+
+            DOM.dialogueText.textContent =
+                "";
+
+        }
+
+        const text =
+            entry.text || "";
+
+        let position = 0;
+
+        function writeCharacter() {
+
+            if (!typing) {
+                return;
+            }
+
+            if (position >= text.length) {
+
+                typing =
+                    false;
+
+                typingTimer =
+                    null;
+
+                currentDisplayedText =
+                    text;
+
+                return;
+
+            }
+
+            currentDisplayedText +=
+                text[position];
+
+            if (
+                DOM &&
+                DOM.dialogueText
+            ) {
+
+                DOM.dialogueText.textContent =
+                    currentDisplayedText;
+
+            }
+
+            position++;
+
+            /*
+             * Le son de sélection n'est pas joué
+             * à chaque lettre afin de ne pas rendre
+             * le dialogue agressif.
+             */
+
+            typingTimer =
+                setTimeout(
+                    writeCharacter,
+                    TYPE_SPEED
+                );
+
+        }
+
+        writeCharacter();
+
+    }
+
+    /* ============================================================
+       SHOW DIALOGUE
        ============================================================ */
 
     function showDialogue(entry) {
@@ -233,62 +814,43 @@
             return;
         }
 
-        if (!DOM || !DOM.dialogueBox) {
-            console.error(
-                "[PARTY 01] DOM du dialogue introuvable."
-            );
+        currentEntry =
+            entry;
+
+        if (
+            !DOM ||
+            !DOM.dialogueBox
+        ) {
+
             return;
         }
 
-        const name =
-            entry.name || "";
-
-        const text =
-            entry.text || "";
-
         if (DOM.dialogueName) {
+
             DOM.dialogueName.textContent =
-                name;
+                entry.name || "";
+
         }
 
         if (DOM.dialogueText) {
-            DOM.dialogueText.textContent =
-                text;
+
+            DOM.dialogueText.style.fontStyle =
+                entry.type === "thought"
+                    ? "italic"
+                    : "normal";
+
+            DOM.dialogueText.style.opacity =
+                entry.type === "thought"
+                    ? "0.82"
+                    : "1";
+
         }
 
         DOM.dialogueBox.classList.remove(
             "hidden"
         );
 
-        /*
-         * Les pensées n'affichent pas de nom.
-         */
-        if (entry.type === "thought") {
-
-            if (DOM.dialogueName) {
-                DOM.dialogueName.textContent =
-                    "";
-            }
-
-            if (DOM.dialogueText) {
-                DOM.dialogueText.style.fontStyle =
-                    "italic";
-
-                DOM.dialogueText.style.opacity =
-                    "0.82";
-            }
-
-        } else {
-
-            if (DOM.dialogueText) {
-                DOM.dialogueText.style.fontStyle =
-                    "normal";
-
-                DOM.dialogueText.style.opacity =
-                    "1";
-            }
-
-        }
+        typeText(entry);
 
     }
 
@@ -297,6 +859,11 @@
        ============================================================ */
 
     function hideDialogue() {
+
+        clearTypingTimer();
+
+        typing =
+            false;
 
         if (
             DOM &&
@@ -317,15 +884,31 @@
 
     async function nextDialogue() {
 
-        if (busy || ended) {
+        if (ended || busy) {
             return;
         }
 
         /*
-         * --------------------------------------------------------
-         * INTRO
-         * --------------------------------------------------------
+         * Si le texte est encore en train de
+         * s'afficher, le clic termine simplement
+         * le texte.
          */
+
+        if (typing) {
+
+            finishCurrentText();
+
+            playClick();
+
+            return;
+
+        }
+
+        playClick();
+
+        /* ========================================================
+           INTRO
+           ======================================================== */
 
         if (phase === "intro") {
 
@@ -342,16 +925,13 @@
                     ]
                 );
 
-                safeCall(
-                    window.playClickSound
-                );
-
                 return;
             }
 
             /*
-             * Fin de l'intro
+             * Fin de l'introduction.
              */
+
             busy = true;
 
             await openLift();
@@ -359,13 +939,12 @@
             busy = false;
 
             return;
+
         }
 
-        /*
-         * --------------------------------------------------------
-         * RENCONTRE
-         * --------------------------------------------------------
-         */
+        /* ========================================================
+           STRANGE PERSON
+           ======================================================== */
 
         if (phase === "strangePerson") {
 
@@ -382,52 +961,74 @@
                     ]
                 );
 
-                safeCall(
-                    window.playClickSound
-                );
-
                 return;
+
             }
 
             /*
-             * Fin du dialogue :
-             * affichage du choix.
+             * Le dialogue est terminé.
+             * Afficher le choix.
              */
 
             showChoice();
 
             return;
+
         }
 
-        /*
-         * --------------------------------------------------------
-         * BONNE ROUTE
-         * --------------------------------------------------------
-         */
+        /* ========================================================
+           GOOD ENDING
+           ======================================================== */
 
         if (phase === "goodEnding") {
 
             if (
-                goodEndingIndex <
+                endingIndex <
                 goodEndingDialogue.length - 1
             ) {
 
-                goodEndingIndex++;
+                endingIndex++;
 
                 showDialogue(
                     goodEndingDialogue[
-                        goodEndingIndex
+                        endingIndex
                     ]
                 );
 
-                safeCall(
-                    window.playClickSound
-                );
-
                 return;
+
             }
 
             await finishGoodEnding();
+
+            return;
+
+        }
+
+        /* ========================================================
+           BAD ENDING
+           ======================================================== */
+
+        if (phase === "badEnding") {
+
+            if (
+                endingIndex <
+                badEndingDialogue.length - 1
+            ) {
+
+                endingIndex++;
+
+                showDialogue(
+                    badEndingDialogue[
+                        endingIndex
+                    ]
+                );
+
+                return;
+
+            }
+
+            await finishBadEnding();
 
         }
 
@@ -449,7 +1050,8 @@
 
         await wait(900);
 
-        dialogueIndex = 0;
+        dialogueIndex =
+            0;
 
         phase =
             "strangePerson";
@@ -488,6 +1090,26 @@
                 "QUE FAIRE ?";
         }
 
+        if (
+            DOM &&
+            DOM.choice1
+        ) {
+
+            DOM.choice1.textContent =
+                "Bloquer la porte";
+
+        }
+
+        if (
+            DOM &&
+            DOM.choice2
+        ) {
+
+            DOM.choice2.textContent =
+                "Laisser la porte se fermer";
+
+        }
+
     }
 
     function hideChoice() {
@@ -506,8 +1128,7 @@
     }
 
     /* ============================================================
-       CHOICE 1
-       BLOQUER LA PORTE
+       GOOD ENDING
        ============================================================ */
 
     async function blockDoor() {
@@ -516,13 +1137,12 @@
             return;
         }
 
-        busy = true;
+        busy =
+            true;
+
+        playClick();
 
         hideChoice();
-
-        safeCall(
-            window.playClickSound
-        );
 
         /*
          * Nate devient heureux.
@@ -539,26 +1159,23 @@
 
         await wait(500);
 
-        /*
-         * Bonne route.
-         */
-
         phase =
             "goodEnding";
 
-        goodEndingIndex = 0;
+        endingIndex =
+            0;
 
         showDialogue(
             goodEndingDialogue[0]
         );
 
-        busy = false;
+        busy =
+            false;
 
     }
 
     /* ============================================================
-       CHOICE 2
-       LAISSER LA PORTE SE FERMER
+       BAD ENDING
        ============================================================ */
 
     async function letDoorClose() {
@@ -567,24 +1184,41 @@
             return;
         }
 
-        busy = true;
+        busy =
+            true;
+
+        playClick();
 
         hideChoice();
 
+        /*
+         * Retour au sprite normal.
+         */
+
         safeCall(
-            window.playClickSound
+            window.setNate,
+            ASSETS.nateNormal
         );
 
-        await wait(600);
+        await wait(650);
 
-        await goToParty015();
+        phase =
+            "badEnding";
 
-        busy = false;
+        endingIndex =
+            0;
+
+        showDialogue(
+            badEndingDialogue[0]
+        );
+
+        busy =
+            false;
 
     }
 
     /* ============================================================
-       FIN BONNE ROUTE
+       GOOD ENDING FINISH
        ============================================================ */
 
     async function finishGoodEnding() {
@@ -593,18 +1227,47 @@
             return;
         }
 
-        ended = true;
+        ended =
+            true;
 
         hideDialogue();
 
-        await wait(900);
+        await wait(1000);
 
         /*
-         * Pour l'instant on prépare la transition
-         * vers PARTY [02].
+         * PARTY [02]
          */
 
         await goToParty02();
+
+    }
+
+    /* ============================================================
+       BAD ENDING FINISH
+       ============================================================ */
+
+    async function finishBadEnding() {
+
+        if (ended) {
+            return;
+        }
+
+        ended =
+            true;
+
+        hideDialogue();
+
+        await wait(1000);
+
+        /*
+         * Pour le moment la mauvaise fin utilise
+         * PARTY [01.5].
+         *
+         * C'est cette PARTY qui pourra afficher
+         * l'écran BAD ENDING définitif.
+         */
+
+        await goToParty015();
 
     }
 
@@ -613,12 +1276,6 @@
        ============================================================ */
 
     async function goToParty015() {
-
-        if (ended) {
-            return;
-        }
-
-        ended = true;
 
         PARTY.current =
             "1.5";
@@ -634,7 +1291,7 @@
 
         }
 
-        await wait(650);
+        await wait(700);
 
         try {
 
@@ -643,7 +1300,6 @@
             );
 
             hideDialogue();
-
             hideChoice();
 
             if (
@@ -656,27 +1312,46 @@
             } else {
 
                 console.warn(
-                    "[PARTY 01] party015_Start() introuvable."
+                    "[PARTY 01] PARTY [01.5] n'est pas encore disponible."
                 );
+
+                /*
+                 * Si PARTY [01.5] n'existe pas encore,
+                 * on enlève le fade pour ne pas bloquer
+                 * le joueur.
+                 */
+
+                PARTY.current =
+                    1;
+
+                ended =
+                    false;
+
+                if (
+                    DOM &&
+                    DOM.fade
+                ) {
+
+                    DOM.fade.classList.remove(
+                        "active"
+                    );
+
+                }
 
             }
 
         } catch (error) {
 
             console.error(
-                "[PARTY 01] Impossible de charger PARTY [01.5]",
+                "[PARTY 01] Erreur PARTY [01.5] :",
                 error
             );
-
-            /*
-             * Si [01.5] n'existe pas encore,
-             * on revient à PARTY [01].
-             */
 
             PARTY.current =
                 1;
 
-            ended = false;
+            ended =
+                false;
 
             if (
                 DOM &&
@@ -713,7 +1388,7 @@
 
         }
 
-        await wait(650);
+        await wait(700);
 
         try {
 
@@ -722,7 +1397,6 @@
             );
 
             hideDialogue();
-
             hideChoice();
 
             if (
@@ -735,26 +1409,40 @@
             } else {
 
                 console.warn(
-                    "[PARTY 01] party02_Start() introuvable."
+                    "[PARTY 01] PARTY [02] n'est pas encore disponible."
                 );
+
+                PARTY.current =
+                    1;
+
+                ended =
+                    false;
+
+                if (
+                    DOM &&
+                    DOM.fade
+                ) {
+
+                    DOM.fade.classList.remove(
+                        "active"
+                    );
+
+                }
 
             }
 
         } catch (error) {
 
             console.error(
-                "[PARTY 01] Impossible de charger PARTY [02]",
+                "[PARTY 01] Erreur PARTY [02] :",
                 error
             );
 
-            /*
-             * PARTY [02] n'existe pas encore.
-             * On enlève simplement le fondu pour
-             * éviter de bloquer complètement l'écran.
-             */
-
             PARTY.current =
                 1;
+
+            ended =
+                false;
 
             if (
                 DOM &&
@@ -772,7 +1460,7 @@
     }
 
     /* ============================================================
-       CHOICE BUTTON CONNECTION
+       CHOICE BUTTONS
        ============================================================ */
 
     function connectChoiceButtons() {
@@ -792,6 +1480,7 @@
             );
 
             return;
+
         }
 
         DOM.choice1.onclick =
@@ -811,18 +1500,14 @@
         DOM.choice1.onmouseenter =
             () => {
 
-                safeCall(
-                    window.playHoverSound
-                );
+                playHover();
 
             };
 
         DOM.choice2.onmouseenter =
             () => {
 
-                safeCall(
-                    window.playHoverSound
-                );
+                playHover();
 
             };
 
@@ -846,7 +1531,12 @@
             !DOM.dialogueBox
         ) {
 
+            console.error(
+                "[PARTY 01] Dialogue introuvable."
+            );
+
             return;
+
         }
 
         DOM.dialogueBox.onclick =
@@ -862,7 +1552,7 @@
     }
 
     /* ============================================================
-       PARTY START
+       START
        ============================================================ */
 
     window.party01_Start =
@@ -873,20 +1563,37 @@
             );
 
             /*
-             * Reset state.
+             * RESET
              */
 
-            dialogueIndex = 0;
-            goodEndingIndex = 0;
+            dialogueIndex =
+                0;
+
+            endingIndex =
+                0;
 
             phase =
                 "intro";
 
-            ended = false;
-            busy = false;
+            ended =
+                false;
+
+            busy =
+                false;
+
+            typing =
+                false;
+
+            currentEntry =
+                null;
+
+            currentDisplayedText =
+                "";
+
+            clearTypingTimer();
 
             /*
-             * PARTY state.
+             * PARTY
              */
 
             PARTY.current =
@@ -896,7 +1603,7 @@
                 true;
 
             /*
-             * Interface.
+             * INTERFACE
              */
 
             if (
@@ -921,8 +1628,7 @@
             );
 
             /*
-             * Nate n'est pas visible pendant
-             * la scène d'ascenseur.
+             * Nate caché pendant la scène.
              */
 
             safeCall(
@@ -938,12 +1644,11 @@
             );
 
             /*
-             * Boutons.
+             * Connexions.
              */
 
-            connectChoiceButtons();
-
             connectDialogue();
+            connectChoiceButtons();
 
             /*
              * Premier dialogue.
@@ -954,8 +1659,7 @@
             );
 
             /*
-             * Sécurité : enlever le fade
-             * si le loader l'a laissé actif.
+             * Retirer le fade.
              */
 
             setTimeout(() => {
@@ -976,7 +1680,7 @@
         };
 
     /* ============================================================
-       EXTERNAL API
+       PUBLIC API
        ============================================================ */
 
     window.party01_NextDialogue =
