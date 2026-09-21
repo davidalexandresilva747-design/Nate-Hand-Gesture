@@ -1,158 +1,182 @@
-/* =========================================================
-   NATE HAND GESTURE — PARTY [01]
-   party01.js
-
-   Cette PARTY gère :
-   - L'arrivée dans l'ascenseur
-   - Le dialogue du joueur
-   - Les pensées
-   - L'ouverture de l'ascenseur
-   - L'apparition de l'inconnue
-   - Le choix du joueur
-   - La bonne route vers [02]
-   - La mauvaise route vers [01.5]
-
-   Le moteur principal doit déjà avoir chargé :
-   - DOM
-   - ASSETS
-   - AUDIO
-   - PARTY
-   - fonctions communes
-   ========================================================= */
-
 (() => {
     "use strict";
 
-    /* =====================================================
-       VARIABLES
-       ===================================================== */
+    /*
+     * ============================================================
+     * NATE HAND GESTURE
+     * PARTY [01]
+     * ============================================================
+     *
+     * Cette PARTY contient :
+     *
+     * 01. Arrivée dans l'ascenseur
+     * 02. Ouverture de l'ascenseur
+     * 03. Rencontre avec Nate
+     * 04. Choix du joueur
+     * 05. Bonne route
+     * 06. Route [01.5]
+     * 07. Route [02]
+     *
+     * ============================================================
+     */
+
+    console.log("[PARTY 01] Initialisation...");
+
+    /* ============================================================
+       REFERENCES
+       ============================================================ */
+
+    const DOM = window.DOM;
+    const ASSETS = window.ASSETS;
+    const PARTY = window.PARTY;
+
+    /* ============================================================
+       STATE
+       ============================================================ */
 
     let dialogueIndex = 0;
     let goodEndingIndex = 0;
 
     let phase = "intro";
+
     let ended = false;
     let busy = false;
 
-    /*
-       Phases possibles :
+    let choicesConnected = false;
+    let dialogueConnected = false;
 
-       intro
-       opening
-       strangePerson
-       choice
-       goodEnding
-       finished
-    */
+    /* ============================================================
+       SAFETY
+       ============================================================ */
 
+    function safeCall(fn, ...args) {
+        try {
+            if (typeof fn === "function") {
+                return fn(...args);
+            }
+        } catch (error) {
+            console.error("[PARTY 01] Erreur :", error);
+        }
+    }
 
-    /* =====================================================
-       DIALOGUE INTRO
-       ===================================================== */
+    function wait(ms) {
+        return new Promise(resolve => {
+            setTimeout(resolve, ms);
+        });
+    }
 
-    const dialogue = [
+    /* ============================================================
+       INTRO DIALOGUE
+       ============================================================ */
+
+    const introDialogue = [
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
+            type: "nate",
+            name: "Nate",
             text: "Je suis vraiment fatigué..."
         },
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
+            type: "nate",
+            name: "Nate",
             text: "J'ai juste envie de rentrer chez moi."
         },
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
+            type: "nate",
+            name: "Nate",
             text: "......."
         },
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
+            type: "nate",
+            name: "Nate",
             text: "..........."
         },
 
         {
             type: "thought",
-            text: "(C'est bizarre... je me rappelle pas que ça prenait autant de temps de monter.)"
+            text:
+                "(C'est bizarre... je me rappelle pas que ça prenait autant de temps de monter.)"
         },
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
+            type: "nate",
+            name: "Nate",
             text: "......."
         },
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
+            type: "nate",
+            name: "Nate",
             text: "J'espère qu'on va bientôt arriver."
         }
 
     ];
 
-
-    /* =====================================================
-       DIALOGUE APRÈS OUVERTURE
-       ===================================================== */
+    /* ============================================================
+       STRANGE PERSON DIALOGUE
+       ============================================================ */
 
     const strangePersonDialogue = [
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
+            type: "nate",
+            name: "Nate",
             text: "..."
         },
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
-            text: "Je ne crois pas vous avoir déjà vue ici."
+            type: "nate",
+            name: "Nate",
+            text:
+                "Je ne crois pas vous avoir déjà vue ici."
         },
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
-            text: "Vous venez d'emménager ?"
+            type: "nate",
+            name: "Nate",
+            text:
+                "Vous venez d'emménager ?"
         },
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
+            type: "nate",
+            name: "Nate",
             text: "..."
         },
 
         {
             type: "thought",
-            text: "(Elle a quelque chose d'étrange...)"
+            text:
+                "(Elle a quelque chose d'étrange...)"
         },
 
         {
             type: "thought",
-            text: "(Son apparence est complètement noire.)"
+            text:
+                "(Son apparence est complètement noire.)"
         },
 
         {
             type: "thought",
-            text: "(Et... son visage ?)"
+            text:
+                "(Et... son visage ?)"
         },
 
         {
-            type: "player",
-            name: "Geliebte Tochter",
-            text: "Vous allez au même étage que moi ?"
+            type: "nate",
+            name: "Nate",
+            text:
+                "Vous allez au même étage que moi ?"
         }
 
     ];
 
-
-    /* =====================================================
-       BONNE FIN
-       ===================================================== */
+    /* ============================================================
+       GOOD ENDING DIALOGUE
+       ============================================================ */
 
     const goodEndingDialogue = [
 
@@ -165,477 +189,466 @@
         {
             type: "nate",
             name: "Nate",
-            text: "C'est rare que quelqu'un laisse la porte ouverte."
+            text:
+                "C'est rare que quelqu'un laisse la porte ouverte."
         },
 
         {
             type: "nate",
             name: "Nate",
-            text: "Merci."
+            text:
+                "Merci."
         },
 
         {
             type: "nate",
             name: "Nate",
-            text: "Je peux peut-être vous accompagner."
+            text:
+                "Je peux peut-être vous accompagner."
         },
 
         {
             type: "nate",
             name: "Nate",
-            text: "J'aimerais bien discuter un peu avec vous."
+            text:
+                "J'aimerais bien discuter un peu avec vous."
         },
 
         {
             type: "nate",
             name: "Nate",
-            text: "Ça ne vous dérange pas... ?"
+            text:
+                "Ça ne vous dérange pas... ?"
         }
 
     ];
 
+    /* ============================================================
+       DIALOGUE DISPLAY
+       ============================================================ */
 
-    /* =====================================================
-       OUTILS
-       ===================================================== */
+    function showDialogue(entry) {
 
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-
-    function safeCall(fn, ...args) {
-        try {
-            if (typeof fn === "function") {
-                return fn(...args);
-            }
-        } catch (error) {
-            console.error("[PARTY 01] Erreur :", error);
+        if (!entry) {
+            return;
         }
-    }
 
-
-    /* =====================================================
-       AFFICHAGE DIALOGUE
-       ===================================================== */
-
-    function showDialogue(data) {
-
-        if (!data || !window.DOM) return;
-
-        const DOM = window.DOM;
-
-        /*
-           On utilise les éléments déjà présents dans
-           l'interface principale.
-        */
-
-        if (DOM.dialogueBox) {
-            DOM.dialogueBox.classList.remove("hidden");
+        if (!DOM || !DOM.dialogueBox) {
+            console.error(
+                "[PARTY 01] DOM du dialogue introuvable."
+            );
+            return;
         }
+
+        const name =
+            entry.name || "";
+
+        const text =
+            entry.text || "";
 
         if (DOM.dialogueName) {
-            DOM.dialogueName.textContent = "";
+            DOM.dialogueName.textContent =
+                name;
         }
 
         if (DOM.dialogueText) {
-            DOM.dialogueText.textContent = "";
+            DOM.dialogueText.textContent =
+                text;
         }
 
+        DOM.dialogueBox.classList.remove(
+            "hidden"
+        );
 
-        /* ---------------------------------------------
-           NOM
-           --------------------------------------------- */
-
-        if (data.type === "thought") {
+        /*
+         * Les pensées n'affichent pas de nom.
+         */
+        if (entry.type === "thought") {
 
             if (DOM.dialogueName) {
-                DOM.dialogueName.textContent = "";
+                DOM.dialogueName.textContent =
+                    "";
+            }
+
+            if (DOM.dialogueText) {
+                DOM.dialogueText.style.fontStyle =
+                    "italic";
+
+                DOM.dialogueText.style.opacity =
+                    "0.82";
             }
 
         } else {
 
-            if (DOM.dialogueName) {
-                DOM.dialogueName.textContent = data.name || "";
+            if (DOM.dialogueText) {
+                DOM.dialogueText.style.fontStyle =
+                    "normal";
+
+                DOM.dialogueText.style.opacity =
+                    "1";
             }
 
         }
 
-
-        /* ---------------------------------------------
-           TEXTE
-           --------------------------------------------- */
-
-        if (DOM.dialogueText) {
-
-            DOM.dialogueText.textContent = data.text || "";
-
-        }
     }
 
+    /* ============================================================
+       HIDE DIALOGUE
+       ============================================================ */
 
-    /* =====================================================
-       DIALOGUE SUIVANT
-       ===================================================== */
+    function hideDialogue() {
 
-    function nextDialogue() {
+        if (
+            DOM &&
+            DOM.dialogueBox
+        ) {
 
-        if (busy || ended) return;
+            DOM.dialogueBox.classList.add(
+                "hidden"
+            );
+
+        }
+
+    }
+
+    /* ============================================================
+       NEXT DIALOGUE
+       ============================================================ */
+
+    async function nextDialogue() {
+
+        if (busy || ended) {
+            return;
+        }
+
+        /*
+         * --------------------------------------------------------
+         * INTRO
+         * --------------------------------------------------------
+         */
 
         if (phase === "intro") {
 
-            if (dialogueIndex < dialogue.length) {
-
-                showDialogue(dialogue[dialogueIndex]);
+            if (
+                dialogueIndex <
+                introDialogue.length - 1
+            ) {
 
                 dialogueIndex++;
+
+                showDialogue(
+                    introDialogue[
+                        dialogueIndex
+                    ]
+                );
+
+                safeCall(
+                    window.playClickSound
+                );
 
                 return;
             }
 
             /*
-               Fin de l'introduction.
-               On passe à l'ouverture de l'ascenseur.
-            */
+             * Fin de l'intro
+             */
+            busy = true;
 
-            phase = "opening";
+            await openLift();
 
-            openLift();
+            busy = false;
 
             return;
         }
 
+        /*
+         * --------------------------------------------------------
+         * RENCONTRE
+         * --------------------------------------------------------
+         */
 
         if (phase === "strangePerson") {
 
-            if (dialogueIndex < strangePersonDialogue.length) {
-
-                showDialogue(
-                    strangePersonDialogue[dialogueIndex]
-                );
+            if (
+                dialogueIndex <
+                strangePersonDialogue.length - 1
+            ) {
 
                 dialogueIndex++;
+
+                showDialogue(
+                    strangePersonDialogue[
+                        dialogueIndex
+                    ]
+                );
+
+                safeCall(
+                    window.playClickSound
+                );
 
                 return;
             }
 
             /*
-               Fin du dialogue avec l'inconnue.
-            */
-
-            phase = "choice";
+             * Fin du dialogue :
+             * affichage du choix.
+             */
 
             showChoice();
 
             return;
         }
 
+        /*
+         * --------------------------------------------------------
+         * BONNE ROUTE
+         * --------------------------------------------------------
+         */
 
         if (phase === "goodEnding") {
 
-            if (goodEndingIndex < goodEndingDialogue.length) {
-
-                showDialogue(
-                    goodEndingDialogue[goodEndingIndex]
-                );
+            if (
+                goodEndingIndex <
+                goodEndingDialogue.length - 1
+            ) {
 
                 goodEndingIndex++;
+
+                showDialogue(
+                    goodEndingDialogue[
+                        goodEndingIndex
+                    ]
+                );
+
+                safeCall(
+                    window.playClickSound
+                );
 
                 return;
             }
 
-            finishGoodEnding();
+            await finishGoodEnding();
 
-            return;
         }
+
     }
 
-
-    /* =====================================================
-       OUVERTURE DE L'ASCENSEUR
-       ===================================================== */
+    /* ============================================================
+       OPEN LIFT
+       ============================================================ */
 
     async function openLift() {
 
-        if (busy) return;
+        hideDialogue();
 
-        busy = true;
+        await wait(500);
 
-        /*
-           On masque le dialogue pendant la transition.
-        */
+        safeCall(
+            window.setBackgroundLiftOpen
+        );
 
-        if (window.DOM && DOM.dialogueBox) {
-            DOM.dialogueBox.classList.add("hidden");
-        }
-
-        /*
-           Petite pause pour donner un effet de transition.
-        */
-
-        await sleep(500);
-
-
-        /*
-           Ascenseur ouvert.
-        */
-
-        safeCall(window.setBackgroundLiftOpen);
-
-
-        await sleep(900);
-
-
-        /*
-           On recommence le dialogue.
-        */
+        await wait(900);
 
         dialogueIndex = 0;
-        phase = "strangePerson";
 
-        busy = false;
+        phase =
+            "strangePerson";
 
-        nextDialogue();
+        showDialogue(
+            strangePersonDialogue[0]
+        );
+
     }
 
-
-    /* =====================================================
-       CHOIX
-       ===================================================== */
+    /* ============================================================
+       CHOICE
+       ============================================================ */
 
     function showChoice() {
 
-        if (!window.DOM) return;
+        hideDialogue();
 
-        const DOM = window.DOM;
+        if (
+            DOM &&
+            DOM.choiceBox
+        ) {
 
+            DOM.choiceBox.classList.add(
+                "active"
+            );
 
-        /*
-           On cache le dialogue normal.
-        */
-
-        if (DOM.dialogueBox) {
-            DOM.dialogueBox.classList.add("hidden");
         }
 
+        if (
+            DOM &&
+            DOM.choiceTitle
+        ) {
 
-        /*
-           L'interface de choix utilise les boutons déjà
-           présents dans le moteur.
-        */
-
-        if (DOM.choiceBox) {
-            DOM.choiceBox.classList.remove("hidden");
+            DOM.choiceTitle.textContent =
+                "QUE FAIRE ?";
         }
 
-        if (DOM.choiceTitle) {
-            DOM.choiceTitle.textContent = "Que faire ?";
-        }
-
-        if (DOM.choice1) {
-            DOM.choice1.textContent = "Bloquer la porte";
-            DOM.choice1.classList.remove("hidden");
-        }
-
-        if (DOM.choice2) {
-            DOM.choice2.textContent = "Laisser la porte se fermer";
-            DOM.choice2.classList.remove("hidden");
-        }
     }
-
-
-    /* =====================================================
-       CACHER CHOIX
-       ===================================================== */
 
     function hideChoice() {
 
-        if (!window.DOM) return;
+        if (
+            DOM &&
+            DOM.choiceBox
+        ) {
 
-        const DOM = window.DOM;
+            DOM.choiceBox.classList.remove(
+                "active"
+            );
 
-        if (DOM.choiceBox) {
-            DOM.choiceBox.classList.add("hidden");
         }
 
-        if (DOM.choice1) {
-            DOM.choice1.classList.add("hidden");
-        }
-
-        if (DOM.choice2) {
-            DOM.choice2.classList.add("hidden");
-        }
     }
 
-
-    /* =====================================================
-       CHOIX 1
+    /* ============================================================
+       CHOICE 1
        BLOQUER LA PORTE
-       ===================================================== */
+       ============================================================ */
 
     async function blockDoor() {
 
-        if (busy || ended) return;
+        if (busy || ended) {
+            return;
+        }
 
         busy = true;
 
         hideChoice();
 
+        safeCall(
+            window.playClickSound
+        );
 
         /*
-           Son de clic si le moteur en possède un.
-        */
+         * Nate devient heureux.
+         */
 
-        if (typeof window.playClick === "function") {
-            window.playClick();
-        }
+        safeCall(
+            window.setNate,
+            ASSETS.nateHappy
+        );
 
+        safeCall(
+            window.showNate
+        );
 
-        /*
-           Nate devient heureuse.
-        */
-
-        if (window.ASSETS && window.ASSETS.nateHappy) {
-
-            safeCall(
-                window.setNate,
-                window.ASSETS.nateHappy
-            );
-
-            safeCall(window.showNate);
-
-        }
-
-
-        await sleep(500);
-
+        await wait(500);
 
         /*
-           Passage au dialogue de la bonne route.
-        */
+         * Bonne route.
+         */
 
-        phase = "goodEnding";
+        phase =
+            "goodEnding";
+
         goodEndingIndex = 0;
+
+        showDialogue(
+            goodEndingDialogue[0]
+        );
 
         busy = false;
 
-        nextDialogue();
     }
 
-
-    /* =====================================================
-       CHOIX 2
+    /* ============================================================
+       CHOICE 2
        LAISSER LA PORTE SE FERMER
-       ===================================================== */
+       ============================================================ */
 
     async function letDoorClose() {
 
-        if (busy || ended) return;
+        if (busy || ended) {
+            return;
+        }
 
         busy = true;
 
         hideChoice();
 
+        safeCall(
+            window.playClickSound
+        );
 
-        if (typeof window.playClick === "function") {
-            window.playClick();
-        }
-
-
-        await sleep(600);
-
-
-        /*
-           Charge PARTY [01.5]
-        */
+        await wait(600);
 
         await goToParty015();
 
+        busy = false;
+
     }
 
-
-    /* =====================================================
-       FIN DE LA BONNE ROUTE
-       ===================================================== */
+    /* ============================================================
+       FIN BONNE ROUTE
+       ============================================================ */
 
     async function finishGoodEnding() {
 
-        if (ended) return;
-
-        ended = true;
-        phase = "finished";
-
-
-        if (window.DOM && DOM.dialogueBox) {
-            DOM.dialogueBox.classList.add("hidden");
+        if (ended) {
+            return;
         }
 
+        ended = true;
 
-        await sleep(700);
+        hideDialogue();
 
+        await wait(900);
+
+        /*
+         * Pour l'instant on prépare la transition
+         * vers PARTY [02].
+         */
 
         await goToParty02();
+
     }
 
-
-    /* =====================================================
-       ALLER À PARTY [01.5]
-       ===================================================== */
+    /* ============================================================
+       PARTY [01.5]
+       ============================================================ */
 
     async function goToParty015() {
 
-        /*
-           On utilise le loader central.
-        */
+        if (ended) {
+            return;
+        }
+
+        ended = true;
+
+        PARTY.current =
+            "1.5";
+
+        if (
+            DOM &&
+            DOM.fade
+        ) {
+
+            DOM.fade.classList.add(
+                "active"
+            );
+
+        }
+
+        await wait(650);
 
         try {
 
-            window.PARTY.current = "1.5";
+            await window.loadPartyScript(
+                "1.5"
+            );
 
-
-            /*
-               Fade écran.
-            */
-
-            if (
-                window.DOM &&
-                DOM.fade
-            ) {
-
-                DOM.fade.classList.add("active");
-
-                await sleep(500);
-            }
-
-
-            /*
-               Charge le fichier [01.5].
-            */
-
-            if (typeof window.loadPartyScript === "function") {
-
-                await window.loadPartyScript("1.5");
-
-            }
-
-
-            /*
-               Nettoyage.
-            */
-
-            if (window.DOM && DOM.dialogueBox) {
-                DOM.dialogueBox.classList.add("hidden");
-            }
+            hideDialogue();
 
             hideChoice();
 
-
-            /*
-               Lance [01.5].
-            */
-
             if (
-                typeof window.party015_Start === "function"
+                typeof window.party015_Start ===
+                "function"
             ) {
 
                 window.party015_Start();
@@ -648,84 +661,73 @@
 
             }
 
-
-            if (
-                window.DOM &&
-                DOM.fade
-            ) {
-
-                await sleep(150);
-
-                DOM.fade.classList.remove("active");
-
-            }
-
         } catch (error) {
 
             console.error(
-                "[PARTY 01] Impossible de charger [01.5] :",
+                "[PARTY 01] Impossible de charger PARTY [01.5]",
                 error
             );
+
+            /*
+             * Si [01.5] n'existe pas encore,
+             * on revient à PARTY [01].
+             */
+
+            PARTY.current =
+                1;
+
+            ended = false;
+
+            if (
+                DOM &&
+                DOM.fade
+            ) {
+
+                DOM.fade.classList.remove(
+                    "active"
+                );
+
+            }
 
         }
 
     }
 
-
-    /* =====================================================
-       ALLER À PARTY [02]
-       ===================================================== */
+    /* ============================================================
+       PARTY [02]
+       ============================================================ */
 
     async function goToParty02() {
 
+        PARTY.current =
+            2;
+
+        if (
+            DOM &&
+            DOM.fade
+        ) {
+
+            DOM.fade.classList.add(
+                "active"
+            );
+
+        }
+
+        await wait(650);
+
         try {
 
-            window.PARTY.current = 2;
+            await window.loadPartyScript(
+                2
+            );
 
-
-            /*
-               Fade.
-            */
-
-            if (
-                window.DOM &&
-                DOM.fade
-            ) {
-
-                DOM.fade.classList.add("active");
-
-                await sleep(700);
-            }
-
-
-            /*
-               Charge [02].
-            */
-
-            if (typeof window.loadPartyScript === "function") {
-
-                await window.loadPartyScript(2);
-
-            }
-
-
-            /*
-               Nettoyage.
-            */
-
-            if (window.DOM && DOM.dialogueBox) {
-                DOM.dialogueBox.classList.add("hidden");
-            }
+            hideDialogue();
 
             hideChoice();
 
-
-            /*
-               Lance PARTY [02].
-            */
-
             if (
-                typeof window.party02_Start === "function"
+                typeof window.party02_Start ===
+                "function"
             ) {
 
                 window.party02_Start();
@@ -738,243 +740,269 @@
 
             }
 
-
-            if (
-                window.DOM &&
-                DOM.fade
-            ) {
-
-                await sleep(200);
-
-                DOM.fade.classList.remove("active");
-
-            }
-
         } catch (error) {
 
             console.error(
-                "[PARTY 01] Impossible de charger [02] :",
+                "[PARTY 01] Impossible de charger PARTY [02]",
                 error
             );
 
+            /*
+             * PARTY [02] n'existe pas encore.
+             * On enlève simplement le fondu pour
+             * éviter de bloquer complètement l'écran.
+             */
+
+            PARTY.current =
+                1;
+
+            if (
+                DOM &&
+                DOM.fade
+            ) {
+
+                DOM.fade.classList.remove(
+                    "active"
+                );
+
+            }
+
         }
 
     }
 
-
-    /* =====================================================
-       CLICK GLOBAL DIALOGUE
-       ===================================================== */
-
-    function handleDialogueClick() {
-
-        if (window.PARTY.current !== 1) {
-            return;
-        }
-
-        if (phase === "choice") {
-            return;
-        }
-
-        nextDialogue();
-    }
-
-
-    /* =====================================================
-       BRANCHEMENT DES BOUTONS
-       ===================================================== */
+    /* ============================================================
+       CHOICE BUTTON CONNECTION
+       ============================================================ */
 
     function connectChoiceButtons() {
 
-        if (!window.DOM) return;
+        if (choicesConnected) {
+            return;
+        }
 
-        const DOM = window.DOM;
+        if (
+            !DOM ||
+            !DOM.choice1 ||
+            !DOM.choice2
+        ) {
 
+            console.error(
+                "[PARTY 01] Boutons de choix introuvables."
+            );
 
-        /*
-           Bouton 1
-        */
+            return;
+        }
 
-        if (DOM.choice1) {
-
-            DOM.choice1.onclick = function(event) {
-
-                event.stopPropagation();
+        DOM.choice1.onclick =
+            () => {
 
                 blockDoor();
 
             };
 
-        }
-
-
-        /*
-           Bouton 2
-        */
-
-        if (DOM.choice2) {
-
-            DOM.choice2.onclick = function(event) {
-
-                event.stopPropagation();
+        DOM.choice2.onclick =
+            () => {
 
                 letDoorClose();
 
             };
 
-        }
-    }
+        DOM.choice1.onmouseenter =
+            () => {
 
-
-    /* =====================================================
-       START PARTY [01]
-       ===================================================== */
-
-    window.party01_Start = function() {
-
-        console.log(
-            "%c[PARTY 01] START",
-            "color:#fff;background:#000;padding:4px 8px;"
-        );
-
-
-        /*
-           État global.
-        */
-
-        window.PARTY.current = 1;
-
-
-        /*
-           Reset.
-        */
-
-        dialogueIndex = 0;
-        goodEndingIndex = 0;
-
-        phase = "intro";
-
-        ended = false;
-        busy = false;
-
-
-        /*
-           Ascenseur fermé.
-        */
-
-        safeCall(window.setBackgroundLift);
-
-
-        /*
-           Nate n'est pas présent dans cette scène.
-        */
-
-        safeCall(window.hideNate);
-
-
-        /*
-           Cache le choix.
-        */
-
-        hideChoice();
-
-
-        /*
-           Affiche le dialogue.
-        */
-
-        if (window.DOM && DOM.dialogueBox) {
-            DOM.dialogueBox.classList.remove("hidden");
-        }
-
-
-        /*
-           Branche les boutons.
-        */
-
-        connectChoiceButtons();
-
-
-        /*
-           Musique PARTY [01].
-        */
-
-        if (
-            typeof window.switchToIntroMusic === "function"
-        ) {
-
-            window.switchToIntroMusic();
-
-        } else if (
-            typeof window.startIntroMusic === "function"
-        ) {
-
-            window.startIntroMusic();
-
-        }
-
-
-        /*
-           Premier dialogue.
-        */
-
-        nextDialogue();
-
-
-        /*
-           Click sur la zone de dialogue.
-        */
-
-        if (window.DOM && DOM.dialogueBox) {
-
-            DOM.dialogueBox.onclick = function(event) {
-
-                /*
-                   Si le clic provient d'un bouton de choix,
-                   on ne traite pas le dialogue.
-                */
-
-                if (
-                    event.target &&
-                    (
-                        event.target === DOM.choice1 ||
-                        event.target === DOM.choice2
-                    )
-                ) {
-                    return;
-                }
-
-                handleDialogueClick();
+                safeCall(
+                    window.playHoverSound
+                );
 
             };
 
+        DOM.choice2.onmouseenter =
+            () => {
+
+                safeCall(
+                    window.playHoverSound
+                );
+
+            };
+
+        choicesConnected =
+            true;
+
+    }
+
+    /* ============================================================
+       DIALOGUE CLICK
+       ============================================================ */
+
+    function connectDialogue() {
+
+        if (dialogueConnected) {
+            return;
         }
 
-    };
+        if (
+            !DOM ||
+            !DOM.dialogueBox
+        ) {
 
+            return;
+        }
 
-    /* =====================================================
-       EXPORTS
-       ===================================================== */
+        DOM.dialogueBox.onclick =
+            () => {
 
-    window.party01_NextDialogue = nextDialogue;
+                nextDialogue();
 
-    window.party01_BlockDoor = blockDoor;
+            };
 
-    window.party01_LetDoorClose = letDoorClose;
+        dialogueConnected =
+            true;
 
-    window.party01_GoToParty015 = goToParty015;
+    }
 
-    window.party01_GoToParty02 = goToParty02;
+    /* ============================================================
+       PARTY START
+       ============================================================ */
 
+    window.party01_Start =
+        function() {
 
-    /* =====================================================
-       READY
-       ===================================================== */
+            console.log(
+                "[PARTY 01] START"
+            );
+
+            /*
+             * Reset state.
+             */
+
+            dialogueIndex = 0;
+            goodEndingIndex = 0;
+
+            phase =
+                "intro";
+
+            ended = false;
+            busy = false;
+
+            /*
+             * PARTY state.
+             */
+
+            PARTY.current =
+                1;
+
+            PARTY.started =
+                true;
+
+            /*
+             * Interface.
+             */
+
+            if (
+                DOM &&
+                DOM.party01
+            ) {
+
+                DOM.party01.classList.add(
+                    "active"
+                );
+
+            }
+
+            hideChoice();
+
+            /*
+             * Ascenseur fermé.
+             */
+
+            safeCall(
+                window.setBackgroundLift
+            );
+
+            /*
+             * Nate n'est pas visible pendant
+             * la scène d'ascenseur.
+             */
+
+            safeCall(
+                window.hideNate
+            );
+
+            /*
+             * Musique.
+             */
+
+            safeCall(
+                window.startIntroMusic
+            );
+
+            /*
+             * Boutons.
+             */
+
+            connectChoiceButtons();
+
+            connectDialogue();
+
+            /*
+             * Premier dialogue.
+             */
+
+            showDialogue(
+                introDialogue[0]
+            );
+
+            /*
+             * Sécurité : enlever le fade
+             * si le loader l'a laissé actif.
+             */
+
+            setTimeout(() => {
+
+                if (
+                    DOM &&
+                    DOM.fade
+                ) {
+
+                    DOM.fade.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            }, 100);
+
+        };
+
+    /* ============================================================
+       EXTERNAL API
+       ============================================================ */
+
+    window.party01_NextDialogue =
+        nextDialogue;
+
+    window.party01_BlockDoor =
+        blockDoor;
+
+    window.party01_LetDoorClose =
+        letDoorClose;
+
+    window.party01_GoToParty015 =
+        goToParty015;
+
+    window.party01_GoToParty02 =
+        goToParty02;
+
+    window.party01_ShowChoice =
+        showChoice;
+
+    /* ============================================================
+       LOADED
+       ============================================================ */
 
     console.log(
-        "%c[PARTY 01] party01.js chargé.",
-        "color:#00ff66;background:#050505;padding:4px 8px;"
+        "[PARTY 01] party[01].js chargé."
     );
 
 })();
