@@ -4184,35 +4184,60 @@ function party01_GoToParty015() {
    [01] DIALOGUE CLICK
    ============================================================ */
 
+/* ============================================================
+   DIALOGUE CLICK — GLOBAL
+   ============================================================ */
+
 dialogue.addEventListener(
     "click",
     () => {
 
+        /* ====================================================
+           PARTY [01]
+           ==================================================== */
+
         if (
-            PARTY.current !== 1
+            PARTY.current === 1
         ) {
+
+            if (
+                party01_Phase ===
+                "narration"
+            ) {
+
+                party01_NextDialogue();
+
+                return;
+
+            }
+
+
+            if (
+                party01_Phase ===
+                "goodEnding"
+            ) {
+
+                party01_NextGoodEnding();
+
+                return;
+
+            }
+
+
             return;
+
         }
 
 
-        if (
-            party01_Phase ===
-            "narration"
-        ) {
-
-            party01_NextDialogue();
-
-            return;
-
-        }
-
+        /* ====================================================
+           PARTY [01.5]
+           ==================================================== */
 
         if (
-            party01_Phase ===
-            "goodEnding"
+            PARTY.current === 1.5
         ) {
 
-            party01_NextGoodEnding();
+            party015_Next();
 
             return;
 
