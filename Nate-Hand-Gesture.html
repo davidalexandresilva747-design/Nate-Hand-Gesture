@@ -136,6 +136,7 @@ button {
             translateX(0)
             translateY(0);
     }
+
 }
 
 
@@ -144,8 +145,10 @@ button {
    ============================================================ */
 
 #nate.glitching {
+
     animation:
         nateGlitch .43s steps(2, end);
+
 }
 
 @keyframes nateGlitch {
@@ -191,6 +194,7 @@ button {
         filter: none;
         opacity: 1;
     }
+
 }
 
 
@@ -199,6 +203,7 @@ button {
    ============================================================ */
 
 #menu {
+
     position: absolute;
 
     z-index: 30;
@@ -228,7 +233,9 @@ button {
 }
 
 #menu.hidden {
+
     opacity: 0;
+
     pointer-events: none;
 
     transform:
@@ -237,6 +244,7 @@ button {
 }
 
 .menu-title {
+
     margin:
         0 0 24px 0;
 
@@ -251,6 +259,7 @@ button {
 }
 
 .menu-subtitle {
+
     margin-bottom: 24px;
 
     color: #aaa;
@@ -261,6 +270,7 @@ button {
 }
 
 .menu-button {
+
     width: 100%;
 
     display: flex;
@@ -288,6 +298,7 @@ button {
 }
 
 .menu-button:hover {
+
     background:
         rgba(255,255,255,.07);
 
@@ -299,6 +310,7 @@ button {
 }
 
 .button-name {
+
     width: 90px;
 
     font-size: 15px;
@@ -307,6 +319,7 @@ button {
 }
 
 .button-description {
+
     flex: 1;
 
     color: #777;
@@ -330,6 +343,7 @@ button {
 }
 
 .credits-title {
+
     font-size: 20px;
 
     letter-spacing: 3px;
@@ -338,6 +352,7 @@ button {
 }
 
 .credits-text {
+
     color: #aaa;
 
     font-size: 11px;
@@ -352,6 +367,7 @@ button {
 }
 
 .back-button {
+
     margin-top: 20px;
 
     padding: 8px 14px;
@@ -372,6 +388,7 @@ button {
    ============================================================ */
 
 #party01 {
+
     position: absolute;
 
     inset: 0;
@@ -387,10 +404,54 @@ button {
 
 
 /* ============================================================
+   PARTY 02
+   ============================================================ */
+
+#party02 {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 41;
+
+    display: none;
+
+    pointer-events: none;
+}
+
+#party02.active {
+
+    display: block;
+
+    pointer-events: auto;
+}
+
+#party02IntroOverlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 42%,
+            rgba(0,0,0,.35) 100%
+        );
+
+    opacity: .65;
+}
+
+
+/* ============================================================
    DIALOGUE
    ============================================================ */
 
 #dialogue {
+
     position: absolute;
 
     left: 50%;
@@ -424,9 +485,12 @@ button {
     cursor: pointer;
 
     display: none;
+
+    z-index: 100;
 }
 
 #speaker {
+
     font-size: 12px;
 
     color: #ddd;
@@ -443,6 +507,7 @@ button {
 }
 
 #dialogueText {
+
     font-size:
         clamp(15px, 1.5vw, 21px);
 
@@ -456,6 +521,7 @@ button {
 }
 
 #dialogueHint {
+
     position: absolute;
 
     right: 18px;
@@ -486,10 +552,11 @@ button {
 
 
 /* ============================================================
-   CHOICE
+   CHOICE PARTY 01
    ============================================================ */
 
 #choicePanel {
+
     position: absolute;
 
     left: 50%;
@@ -510,6 +577,8 @@ button {
         1px solid rgba(255,255,255,.25);
 
     display: none;
+
+    z-index: 150;
 }
 
 #choicePanel.active {
@@ -517,6 +586,7 @@ button {
 }
 
 .choice-title {
+
     text-align: center;
 
     margin-bottom: 24px;
@@ -525,6 +595,7 @@ button {
 }
 
 .choice-button {
+
     display: block;
 
     width: 100%;
@@ -552,6 +623,7 @@ button {
 }
 
 .choice-button:hover {
+
     background: #181818;
 
     transform:
@@ -560,76 +632,128 @@ button {
 
 
 /* ============================================================
-   PARTY 02
+   PARTY 02 CHOICE
    ============================================================ */
 
-#party02 {
-    position: fixed;
+#party02ChoicePanel {
 
-    inset: 0;
+    position: absolute;
 
-    z-index: 700;
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width:
+        min(720px, 88vw);
+
+    padding: 28px;
+
+    background:
+        rgba(0,0,0,.95);
+
+    border:
+        1px solid rgba(255,255,255,.28);
+
+    box-shadow:
+        0 0 0 2px rgba(0,0,0,.8),
+        0 0 40px rgba(0,0,0,.7);
 
     display: none;
 
-    align-items: center;
-
-    justify-content: center;
-
-    flex-direction: column;
-
-    background: #000;
-
-    text-align: center;
+    z-index: 160;
 }
 
-#party02.active {
-    display: flex;
-}
+#party02ChoicePanel.active {
 
-.party02-title {
-    font-size:
-        clamp(35px, 7vw, 90px);
-
-    letter-spacing: 12px;
-
-    text-shadow:
-        3px 0 #f00,
-        -3px 0 #00ffff;
+    display: block;
 
     animation:
-        party02Flicker 2s infinite;
+        party02ChoiceAppear .35s ease;
 }
 
-.party02-sub {
-    margin-top: 25px;
+@keyframes party02ChoiceAppear {
 
-    color: #555;
+    from {
 
-    font-size: 11px;
+        opacity: 0;
+
+        transform:
+            translate(-50%, -46%);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translate(-50%, -50%);
+    }
+}
+
+.party02-choice-title {
+
+    text-align: center;
+
+    margin-bottom: 24px;
+
+    font-size: 13px;
 
     letter-spacing: 5px;
+
+    color: #ddd;
 }
 
-@keyframes party02Flicker {
+.party02-choice {
 
-    0%,
-    90%,
-    100% {
-        opacity: 1;
-    }
+    width: 100%;
 
-    92% {
-        opacity: .35;
-    }
+    padding: 15px;
 
-    95% {
-        opacity: 1;
-    }
+    margin: 9px 0;
 
-    97% {
-        opacity: .55;
-    }
+    border:
+        1px solid #555;
+
+    background:
+        #050505;
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        background .15s ease,
+        transform .15s ease,
+        border-color .15s ease;
+}
+
+.party02-choice:hover {
+
+    background:
+        #181818;
+
+    border-color:
+        #aaa;
+
+    transform:
+        translateX(5px);
+}
+
+.party02-choice::before {
+
+    content: "> ";
+
+    color: #777;
 }
 
 
@@ -638,6 +762,7 @@ button {
    ============================================================ */
 
 #fade {
+
     position: fixed;
 
     inset: 0;
@@ -664,6 +789,7 @@ button {
    ============================================================ */
 
 #badEndingGlitch {
+
     position: fixed;
 
     inset: 0;
@@ -680,6 +806,7 @@ button {
 }
 
 #badEndingGlitch.active {
+
     display: block;
 
     animation:
@@ -687,6 +814,7 @@ button {
 }
 
 .bad-glitch-layer {
+
     position: absolute;
 
     inset: -12%;
@@ -706,32 +834,44 @@ button {
 }
 
 #glitchFruit {
+
     background-image:
-        url("https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/background/Fruit%20Jelly%20(B%26W).png");
+        url(
+            "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/background/Fruit%20Jelly%20(B%26W).png"
+        );
 
     animation:
         glitchTexture1 .23s steps(2) infinite;
 }
 
 #glitchFloor {
+
     background-image:
-        url("https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/background/Floor%20Cement.png");
+        url(
+            "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/background/Floor%20Cement.png"
+        );
 
     animation:
         glitchTexture2 .17s steps(2) infinite;
 }
 
 #glitchMetal {
+
     background-image:
-        url("https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/background/Brushed%20Metal%203.png");
+        url(
+            "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/background/Brushed%20Metal%203.png"
+        );
 
     animation:
         glitchTexture3 .29s steps(2) infinite;
 }
 
 #glitchNumbers {
+
     background-image:
-        url("https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/background/DropCap%20Numbers.png");
+        url(
+            "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/background/DropCap%20Numbers.png"
+        );
 
     animation:
         glitchTexture4 .11s steps(2) infinite;
@@ -779,27 +919,32 @@ button {
 
     0% {
         opacity: .1;
-        transform: translate(0,0);
+        transform:
+            translate(0,0);
     }
 
     30% {
         opacity: .5;
-        transform: translate(25px,-12px);
+        transform:
+            translate(25px,-12px);
     }
 
     55% {
         opacity: .12;
-        transform: translate(-20px,8px);
+        transform:
+            translate(-20px,8px);
     }
 
     80% {
         opacity: .7;
-        transform: translate(8px,15px);
+        transform:
+            translate(8px,15px);
     }
 
     100% {
         opacity: .05;
-        transform: translate(-5px,-5px);
+        transform:
+            translate(-5px,-5px);
     }
 }
 
@@ -845,59 +990,71 @@ button {
 
     0% {
         opacity: .05;
-        transform: translate(0,0);
+        transform:
+            translate(0,0);
     }
 
     15% {
         opacity: .9;
-        transform: translate(-35px,0);
+        transform:
+            translate(-35px,0);
     }
 
     35% {
         opacity: .1;
-        transform: translate(30px,3px);
+        transform:
+            translate(30px,3px);
     }
 
     55% {
         opacity: .8;
-        transform: translate(-12px,-4px);
+        transform:
+            translate(-12px,-4px);
     }
 
     75% {
         opacity: .15;
-        transform: translate(25px,5px);
+        transform:
+            translate(25px,5px);
     }
 
     100% {
         opacity: .05;
-        transform: translate(0,0);
+        transform:
+            translate(0,0);
     }
 }
 
 @keyframes badGlitchShake {
 
     0% {
-        transform: translate(0,0);
+        transform:
+            translate(0,0);
     }
 
     25% {
-        transform: translate(-5px,2px);
+        transform:
+            translate(-5px,2px);
     }
 
     50% {
-        transform: translate(6px,-3px);
+        transform:
+            translate(6px,-3px);
     }
 
     75% {
-        transform: translate(-3px,-2px);
+        transform:
+            translate(-3px,-2px);
     }
 
     100% {
-        transform: translate(4px,3px);
+        transform:
+            translate(4px,3px);
     }
 }
 
 #badEndingGlitch::before {
+
     content: "";
 
     position: absolute;
@@ -924,17 +1081,20 @@ button {
 @keyframes badRGB {
 
     0% {
-        transform: translateX(-12px);
+        transform:
+            translateX(-12px);
         opacity: .3;
     }
 
     50% {
-        transform: translateX(15px);
+        transform:
+            translateX(15px);
         opacity: .8;
     }
 
     100% {
-        transform: translateX(-6px);
+        transform:
+            translateX(-6px);
         opacity: .2;
     }
 }
@@ -945,6 +1105,7 @@ button {
    ============================================================ */
 
 #badEndingScreen {
+
     position: fixed;
 
     inset: 0;
@@ -969,6 +1130,7 @@ button {
 }
 
 #badEndingScreen.active {
+
     display: flex;
 
     animation:
@@ -976,6 +1138,7 @@ button {
 }
 
 .bad-ending-title {
+
     font-size:
         clamp(32px, 6vw, 80px);
 
@@ -993,6 +1156,7 @@ button {
 }
 
 .bad-ending-line {
+
     margin-top: 28px;
 
     font-size:
@@ -1004,6 +1168,7 @@ button {
 }
 
 .bad-ending-sub {
+
     margin-top: 12px;
 
     font-size: 9px;
@@ -1017,7 +1182,8 @@ button {
 
     0% {
         opacity: 0;
-        transform: scale(1.08);
+        transform:
+            scale(1.08);
     }
 
     35% {
@@ -1026,12 +1192,14 @@ button {
 
     65% {
         opacity: .75;
-        transform: scale(.995);
+        transform:
+            scale(.995);
     }
 
     100% {
         opacity: 1;
-        transform: scale(1);
+        transform:
+            scale(1);
     }
 }
 
@@ -1062,6 +1230,7 @@ button {
    ============================================================ */
 
 #crt {
+
     position: fixed;
 
     inset: 0;
@@ -1085,6 +1254,7 @@ button {
 }
 
 #vignette {
+
     position: fixed;
 
     inset: 0;
@@ -1109,18 +1279,31 @@ button {
 @media (max-width: 700px) {
 
     #menu {
+
         left: 3vw;
+
         width: 94vw;
     }
 
     #nate {
+
         max-width: 95vw;
+
         max-height: 65vh;
     }
 
     #dialogue {
+
         width: 94vw;
+
         bottom: 3vh;
+    }
+
+    #party02ChoicePanel {
+
+        width: 94vw;
+
+        padding: 20px;
     }
 }
 
@@ -1222,24 +1405,18 @@ This project is an unofficial fan-made recreation inspired by
 
 "Nate Hand Gesture", its original characters, artwork, music,
 sounds, story, trademarks and other original assets belong to
-their respective copyright holders.
+their respective copyright holder.
 
-This project is not affiliated with, endorsed by, or sponsored
-by the original creators of "Nate Hand Gesture".
+HTML recreation and implementation:
+David / david_officiel
 
-The original game's assets are not included in this repository
-unless explicitly stated otherwise.
-
-The original game's copyright remains with its respective owners.
-
-Code written specifically for this fan recreation is available
-under the MIT License, unless otherwise stated.</div>
+This is a fan-made project.</div>
 
             <button
                 class="back-button"
-                id="backCredits"
+                id="creditsBack"
             >
-                BACK
+                < BACK
             </button>
 
         </div>
@@ -1251,44 +1428,7 @@ under the MIT License, unless otherwise stated.</div>
          PARTY 01
          ======================================================== -->
 
-    <div id="party01">
-
-        <div id="dialogue">
-
-            <div id="speaker"></div>
-
-            <div id="dialogueText"></div>
-
-            <div id="dialogueHint">
-                CLICK / SPACE TO CONTINUE
-            </div>
-
-        </div>
-
-
-        <div id="choicePanel">
-
-            <div class="choice-title">
-                QUE FAIRE ?
-            </div>
-
-            <button
-                class="choice-button"
-                id="choiceBlock"
-            >
-                BLOQUER LA PORTE
-            </button>
-
-            <button
-                class="choice-button"
-                id="choiceClose"
-            >
-                LAISSER LA PORTE SE FERMER
-            </button>
-
-        </div>
-
-    </div>
+    <div id="party01"></div>
 
 
     <!-- ========================================================
@@ -1297,13 +1437,80 @@ under the MIT License, unless otherwise stated.</div>
 
     <div id="party02">
 
-        <div class="party02-title">
-            PARTY [02]
+        <div id="party02IntroOverlay"></div>
+
+        <div id="party02ChoicePanel">
+
+            <div class="party02-choice-title">
+                QUE FAIRE ?
+            </div>
+
+            <button
+                class="party02-choice"
+                id="party02Refuse"
+            >
+                REFUSER LE THÉ
+            </button>
+
+            <button
+                class="party02-choice"
+                id="party02Accept"
+            >
+                ACCEPTER LE THÉ
+            </button>
+
+            <button
+                class="party02-choice"
+                id="party02Ask"
+            >
+                DEMANDER CE QU'IL Y A DEDANS
+            </button>
+
         </div>
 
-        <div class="party02-sub">
-            COMING SOON...
+    </div>
+
+
+    <!-- ========================================================
+         DIALOGUE
+         ======================================================== -->
+
+    <div id="dialogue">
+
+        <div id="speaker"></div>
+
+        <div id="dialogueText"></div>
+
+        <div id="dialogueHint">
+            CLICK / SPACE
         </div>
+
+    </div>
+
+
+    <!-- ========================================================
+         PARTY 01 CHOICE
+         ======================================================== -->
+
+    <div id="choicePanel">
+
+        <div class="choice-title">
+            QUE FAIRE ?
+        </div>
+
+        <button
+            class="choice-button"
+            id="choiceBlock"
+        >
+            BLOQUER LA PORTE
+        </button>
+
+        <button
+            class="choice-button"
+            id="choiceClose"
+        >
+            LAISSER LA PORTE SE FERMER
+        </button>
 
     </div>
 
@@ -1338,7 +1545,7 @@ under the MIT License, unless otherwise stated.</div>
 
 
     <!-- ========================================================
-         BAD ENDING
+         BAD ENDING SCREEN
          ======================================================== -->
 
     <div id="badEndingScreen">
@@ -1348,23 +1555,24 @@ under the MIT License, unless otherwise stated.</div>
         </div>
 
         <div class="bad-ending-line">
-            YOU SHOULD HAVE STOPPED THE DOOR.
+            PARTY [01.5]
         </div>
 
         <div class="bad-ending-sub">
-            [01.5]
+            YOU SHOULD HAVE STOPPED THE DOOR
         </div>
 
     </div>
 
 
-    <div id="fade"></div>
+    <!-- ========================================================
+         CRT
+         ======================================================== -->
+
+    <div id="crt"></div>
+    <div id="vignette"></div>
 
 </div>
-
-
-<div id="crt"></div>
-<div id="vignette"></div>
 
 
 <script>
@@ -1393,7 +1601,6 @@ const ASSETS = {
     backgroundLiftF3:
         "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/background/lift_f3.png",
 
-
     nateNormal:
         "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/Sprite/normal.png",
 
@@ -1403,24 +1610,15 @@ const ASSETS = {
     nateHappy:
         "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/Sprite/happy.png",
 
+    nateStanHappy:
+        "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/Sprite/stanhappy.png",
+
+    nateSuperHappy:
+        "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/Sprite/superhappy.png",
+
     nateSuperAngry:
-        "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/Sprite/superangry.png",
+        "https://raw.githubusercontent.com/davidalexandresilva747-design/Nate-Hand-Gesture/refs/heads/main/Sprite/superangry.png"
 
-
-    menuMusic:
-        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/main.wav",
-
-    introMusic:
-        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/loop.wav",
-
-    click:
-        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/pick.wav",
-
-    hover:
-        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/choice.wav",
-
-    manScream:
-        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/manscream.wav"
 };
 
 
@@ -1442,6 +1640,18 @@ const mainMenu =
 
 const credits =
     document.getElementById("credits");
+
+const playButton =
+    document.getElementById("playButton");
+
+const creditsButton =
+    document.getElementById("creditsButton");
+
+const exitButton =
+    document.getElementById("exitButton");
+
+const creditsBack =
+    document.getElementById("creditsBack");
 
 const party01 =
     document.getElementById("party01");
@@ -1467,6 +1677,18 @@ const choiceBlock =
 const choiceClose =
     document.getElementById("choiceClose");
 
+const party02ChoicePanel =
+    document.getElementById("party02ChoicePanel");
+
+const party02Refuse =
+    document.getElementById("party02Refuse");
+
+const party02Accept =
+    document.getElementById("party02Accept");
+
+const party02Ask =
+    document.getElementById("party02Ask");
+
 const badEndingGlitch =
     document.getElementById("badEndingGlitch");
 
@@ -1475,12 +1697,15 @@ const badEndingScreen =
 
 
 /* ============================================================
-   PARTY SYSTEM
+   PARTY STATE
    ============================================================ */
 
 const PARTY = {
+
     current: 0,
+
     started: false
+
 };
 
 
@@ -1489,39 +1714,84 @@ const PARTY = {
    ============================================================ */
 
 const menuMusic =
-    new Audio(ASSETS.menuMusic);
+    new Audio(
+        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/main.wav"
+    );
 
 const introMusic =
-    new Audio(ASSETS.introMusic);
+    new Audio(
+        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/loop.wav"
+    );
 
 const clickSound =
-    new Audio(ASSETS.click);
+    new Audio(
+        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/pick.wav"
+    );
 
 const hoverSound =
-    new Audio(ASSETS.hover);
+    new Audio(
+        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/choice.wav"
+    );
 
 const manScream =
-    new Audio(ASSETS.manScream);
+    new Audio(
+        "https://github.com/davidalexandresilva747-design/Nate-Hand-Gesture/raw/refs/heads/main/AudioClip/manscream.wav"
+    );
 
 menuMusic.loop = true;
 introMusic.loop = true;
 
-menuMusic.volume = .45;
-introMusic.volume = .45;
-clickSound.volume = .75;
-hoverSound.volume = .45;
-manScream.volume = .8;
+menuMusic.volume = .65;
+introMusic.volume = .65;
 
-manScream.preload = "auto";
+clickSound.volume = .65;
+hoverSound.volume = .45;
+manScream.volume = .9;
+
+
+/* ============================================================
+   AUDIO FUNCTIONS
+   ============================================================ */
+
+function startMenuMusic() {
+
+    introMusic.pause();
+
+    try {
+
+        menuMusic.currentTime = 0;
+
+        menuMusic.play()
+            .catch(() => {});
+
+    } catch {}
+
+}
+
+
+function startIntroMusic() {
+
+    menuMusic.pause();
+
+    try {
+
+        introMusic.currentTime = 0;
+
+        introMusic.play()
+            .catch(() => {});
+
+    } catch {}
+
+}
 
 
 function playClickSound() {
 
     try {
+
         clickSound.currentTime = 0;
 
-        clickSound
-            .play()
+        clickSound.play()
             .catch(() => {});
 
     } catch {}
@@ -1532,10 +1802,10 @@ function playClickSound() {
 function playHoverSound() {
 
     try {
+
         hoverSound.currentTime = 0;
 
-        hoverSound
-            .play()
+        hoverSound.play()
             .catch(() => {});
 
     } catch {}
@@ -1543,144 +1813,52 @@ function playHoverSound() {
 }
 
 
-function startMenuMusic() {
-
-    if (PARTY.current !== 0) {
-        return;
-    }
-
-    introMusic.pause();
-
-    menuMusic
-        .play()
-        .catch(() => {});
-}
-
-
-function startIntroMusic() {
-
-    if (
-        PARTY.current !== 1 &&
-        PARTY.current !== 1.5 &&
-        PARTY.current !== 2
-    ) {
-        return;
-    }
-
-    menuMusic.pause();
-
-    introMusic
-        .play()
-        .catch(() => {});
-}
-
-
 /* ============================================================
    MENU
    ============================================================ */
 
-function showMenuDescription(type) {
+playButton.addEventListener(
+    "mouseenter",
+    playHoverSound
+);
 
-    document.getElementById(
-        "playDescription"
-    ).textContent = "";
+creditsButton.addEventListener(
+    "mouseenter",
+    playHoverSound
+);
 
-    document.getElementById(
-        "creditsDescription"
-    ).textContent = "";
-
-    document.getElementById(
-        "exitDescription"
-    ).textContent = "";
-
-    if (type === "play") {
-
-        document.getElementById(
-            "playDescription"
-        ).textContent =
-            "...the elevator is waiting.";
-
-    }
-
-    if (type === "credits") {
-
-        document.getElementById(
-            "creditsDescription"
-        ).textContent =
-            "...who made this?";
-
-    }
-
-    if (type === "exit") {
-
-        document.getElementById(
-            "exitDescription"
-        ).textContent =
-            "...there is no way out.";
-
-    }
-}
-
-
-document.getElementById(
-    "playButton"
-).addEventListener(
+exitButton.addEventListener(
     "mouseenter",
     playHoverSound
 );
 
 
-document.getElementById(
-    "creditsButton"
-).addEventListener(
+creditsBack.addEventListener(
     "mouseenter",
     playHoverSound
 );
 
 
-document.getElementById(
-    "exitButton"
-).addEventListener(
-    "mouseenter",
-    playHoverSound
-);
-
-
-document.getElementById(
-    "playButton"
-).addEventListener(
+playButton.addEventListener(
     "click",
     () => {
 
         playClickSound();
 
-        /*
-         * IMPORTANT :
-         * Nate du menu disparaît immédiatement.
-         */
+        nate.style.display =
+            "none";
 
-        nate.style.display = "none";
-
-        showMenuDescription("play");
-
-        setTimeout(
-            party01_Start,
-            250
-        );
+        party01_Start();
 
     }
 );
 
 
-document.getElementById(
-    "creditsButton"
-).addEventListener(
+creditsButton.addEventListener(
     "click",
     () => {
 
         playClickSound();
-
-        showMenuDescription("credits");
 
         mainMenu.style.display =
             "none";
@@ -1693,23 +1871,7 @@ document.getElementById(
 );
 
 
-document.getElementById(
-    "exitButton"
-).addEventListener(
-    "click",
-    () => {
-
-        playClickSound();
-
-        showMenuDescription("exit");
-
-    }
-);
-
-
-document.getElementById(
-    "backCredits"
-).addEventListener(
+creditsBack.addEventListener(
     "click",
     () => {
 
@@ -1726,46 +1888,46 @@ document.getElementById(
 );
 
 
+exitButton.addEventListener(
+    "click",
+    () => {
+
+        playClickSound();
+
+        /*
+         * Un navigateur ne permet pas toujours
+         * à une page de se fermer elle-même.
+         */
+
+        try {
+
+            window.close();
+
+        } catch {}
+
+        document.body.innerHTML =
+            "<div style='display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#777;font-family:monospace;letter-spacing:4px;'>SESSION TERMINATED</div>";
+
+    }
+);
+
+
 /* ============================================================
-   PARTY 01 — DIALOGUES
+   PARTY 01 DIALOGUE
    ============================================================ */
 
 const party01Dialogue = [
 
     {
-        speaker: "Joueur",
+        speaker: "",
         text:
-            "Enfin... une journée de plus."
-    },
-
-    {
-        speaker: "Joueur",
-        text:
-            "Je pensais vraiment ne jamais réussir à terminer aujourd'hui."
-    },
-
-    {
-        speaker: "Joueur",
-        text:
-            "J'ai juste envie de rentrer chez moi, de fermer la porte et de dormir."
+            "(Je suis dans l'ascenseur.)"
     },
 
     {
         speaker: "",
         text:
-            "(Mes jambes sont complètement mortes...)"
-    },
-
-    {
-        speaker: "Joueur",
-        text:
-            "Allez... encore quelques étages."
-    },
-
-    {
-        speaker: "Joueur",
-        text:
-            "Je ne devrais même pas avoir à réfléchir autant pour prendre un ascenseur."
+            "(Je ne devrais même pas avoir à réfléchir autant pour prendre un ascenseur.)"
     },
 
     {
@@ -1781,7 +1943,7 @@ const party01Dialogue = [
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "Je suis pourtant déjà monté dans cet ascenseur des centaines de fois."
     },
@@ -1793,13 +1955,13 @@ const party01Dialogue = [
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "Peut-être que je suis juste trop fatigué."
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "Oui... c'est sûrement ça."
     },
@@ -1817,10 +1979,11 @@ const party01Dialogue = [
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "J'espère qu'on va bientôt arriver."
     }
+
 ];
 
 
@@ -1857,13 +2020,13 @@ const party01Strange = [
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "Euh..."
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "Bonsoir."
     },
@@ -1875,13 +2038,13 @@ const party01Strange = [
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "Je ne crois pas vous avoir déjà vue ici."
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "Vous venez d'emménager dans l'immeuble ?"
     },
@@ -1905,7 +2068,7 @@ const party01Strange = [
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "Vous allez au même étage que moi ?"
     },
@@ -1929,7 +2092,7 @@ const party01Strange = [
     },
 
     {
-        speaker: "Joueur",
+        speaker: "Nate",
         text:
             "Euh... vous voulez entrer ?"
     },
@@ -1945,68 +2108,7 @@ const party01Strange = [
         text:
             "(Je dois faire quelque chose.)"
     }
-];
 
-
-/* ============================================================
-   GOOD ENDING
-   ============================================================ */
-
-const party01GoodEnding = [
-
-    {
-        speaker: "Nate",
-        text:
-            "Tu... as vraiment décidé de bloquer la porte ?"
-    },
-
-    {
-        speaker: "Joueur",
-        text:
-            "Oui."
-    },
-
-    {
-        speaker: "Nate",
-        text:
-            "Alors tu vas rester ici avec moi."
-    },
-
-    {
-        speaker: "",
-        text:
-            "(Sa voix est étrangement calme.)"
-    },
-
-    {
-        speaker: "Joueur",
-        text:
-            "Je ne sais pas pourquoi, mais..."
-    },
-
-    {
-        speaker: "Joueur",
-        text:
-            "Je n'arrive pas à partir."
-    },
-
-    {
-        speaker: "Nate",
-        text:
-            "Tu n'as pas besoin de partir."
-    },
-
-    {
-        speaker: "",
-        text:
-            "(Elle s'approche lentement.)"
-    },
-
-    {
-        speaker: "Nate",
-        text:
-            "Reste encore un peu."
-    }
 ];
 
 
@@ -2024,35 +2126,48 @@ let party01Timer =
 let party01CurrentText =
     "";
 
-let party01GoodEndingIndex =
-    0;
-
 
 /* ============================================================
-   TYPEWRITER PARTY 01
+   GENERIC PARTY 01 TYPEWRITER
    ============================================================ */
 
-function typeDialogue(text, callback) {
+function typeDialogue(
+    text,
+    callback
+) {
 
     if (party01Timer) {
-        clearTimeout(party01Timer);
+
+        clearTimeout(
+            party01Timer
+        );
+
     }
 
-    party01Typing = true;
+    party01Typing =
+        true;
 
-    party01CurrentText = text;
+    party01CurrentText =
+        text;
 
-    dialogueText.textContent = "";
+    dialogueText.textContent =
+        "";
 
     let index = 0;
 
+
     function write() {
 
-        if (index >= text.length) {
+        if (
+            index >=
+            text.length
+        ) {
 
-            party01Typing = false;
+            party01Typing =
+                false;
 
-            party01Timer = null;
+            party01Timer =
+                null;
 
             if (callback) {
                 callback();
@@ -2061,27 +2176,30 @@ function typeDialogue(text, callback) {
             return;
         }
 
+
         dialogueText.textContent +=
             text[index];
 
         index++;
+
 
         party01Timer =
             setTimeout(
                 write,
                 28
             );
+
     }
 
+
     write();
+
 }
 
 
-/* ============================================================
-   SHOW PARTY 01 DIALOGUE
-   ============================================================ */
-
-function showParty01Dialogue(entry) {
+function showParty01Dialogue(
+    entry
+) {
 
     speaker.textContent =
         entry.speaker;
@@ -2097,6 +2215,7 @@ function showParty01Dialogue(entry) {
     typeDialogue(
         entry.text
     );
+
 }
 
 
@@ -2106,34 +2225,11 @@ function showParty01Dialogue(entry) {
 
 function party01_Start() {
 
-    PARTY.current = 1;
-    PARTY.started = true;
+    PARTY.current =
+        1;
 
-    /*
-     * Nettoyage complet d'un éventuel ancien état.
-     */
-
-    badEndingScreen.classList.remove(
-        "active"
-    );
-
-    badEndingGlitch.classList.remove(
-        "active"
-    );
-
-    badEndingGlitch.style.filter =
-        "";
-
-    party02.classList.remove(
-        "active"
-    );
-
-    /*
-     * Nate du menu disparaît AVANT toute autre chose.
-     */
-
-    nate.style.display =
-        "none";
+    PARTY.started =
+        true;
 
     menu.classList.add(
         "hidden"
@@ -2143,7 +2239,15 @@ function party01_Start() {
         "active"
     );
 
+    party02.classList.remove(
+        "active"
+    );
+
     choicePanel.classList.remove(
+        "active"
+    );
+
+    party02ChoicePanel.classList.remove(
         "active"
     );
 
@@ -2156,22 +2260,24 @@ function party01_Start() {
     nate.src =
         ASSETS.nateNormal;
 
+    nate.style.display =
+        "none";
+
     dialogue.style.display =
         "block";
 
-    party01Index = 0;
+    party01Index =
+        0;
 
     party01Phase =
         "narration";
-
-    party01GoodEndingIndex =
-        0;
 
     startIntroMusic();
 
     showParty01Dialogue(
         party01Dialogue[0]
     );
+
 }
 
 
@@ -2181,16 +2287,18 @@ function party01_Start() {
 
 function party01_NextDialogue() {
 
-    if (PARTY.current !== 1) {
+    if (
+        PARTY.current !== 1
+    ) {
+
         return;
+
     }
 
-    /*
-     * Si le texte est encore en train
-     * de s'écrire : SPACE/clic le complète.
-     */
 
-    if (party01Typing) {
+    if (
+        party01Typing
+    ) {
 
         playClickSound();
 
@@ -2198,21 +2306,29 @@ function party01_NextDialogue() {
             party01Timer
         );
 
-        party01Timer = null;
+        party01Timer =
+            null;
 
-        party01Typing = false;
+        party01Typing =
+            false;
 
         dialogueText.textContent =
             party01CurrentText;
 
         return;
+
     }
+
 
     playClickSound();
 
-    if (party01Phase === "narration") {
+    party01Index++;
 
-        party01Index++;
+
+    if (
+        party01Phase ===
+        "narration"
+    ) {
 
         if (
             party01Index <
@@ -2226,6 +2342,7 @@ function party01_NextDialogue() {
             );
 
             return;
+
         }
 
         party01_OpenLift();
@@ -2234,9 +2351,10 @@ function party01_NextDialogue() {
     }
 
 
-    if (party01Phase === "strange") {
-
-        party01Index++;
+    if (
+        party01Phase ===
+        "strange"
+    ) {
 
         if (
             party01Index <
@@ -2250,12 +2368,23 @@ function party01_NextDialogue() {
             );
 
             return;
+
         }
 
         party01_ShowChoice();
 
-        return;
     }
+
+
+    if (
+        party01Phase ===
+        "goodEnding"
+    ) {
+
+        party01_GoToParty02();
+
+    }
+
 }
 
 
@@ -2271,20 +2400,20 @@ function party01_OpenLift() {
     nate.style.display =
         "none";
 
-    background.style.opacity =
-        "0";
+    background.src =
+        ASSETS.backgroundLiftOpen;
+
 
     setTimeout(
         () => {
 
-            background.src =
-                ASSETS.backgroundLiftOpen;
+            if (
+                PARTY.current !== 1
+            ) {
 
-            background.onload = () => {
+                return;
 
-                background.style.opacity =
-                    "1";
-            };
+            }
 
             party01Phase =
                 "strange";
@@ -2292,25 +2421,19 @@ function party01_OpenLift() {
             party01Index =
                 0;
 
-            setTimeout(
-                () => {
-
-                    showParty01Dialogue(
-                        party01Strange[0]
-                    );
-
-                },
-                250
+            showParty01Dialogue(
+                party01Strange[0]
             );
 
         },
-        350
+        900
     );
+
 }
 
 
 /* ============================================================
-   CHOICE
+   PARTY 01 CHOICE
    ============================================================ */
 
 function party01_ShowChoice() {
@@ -2321,6 +2444,7 @@ function party01_ShowChoice() {
     choicePanel.classList.add(
         "active"
     );
+
 }
 
 
@@ -2328,7 +2452,6 @@ choiceBlock.addEventListener(
     "mouseenter",
     playHoverSound
 );
-
 
 choiceClose.addEventListener(
     "mouseenter",
@@ -2340,7 +2463,6 @@ choiceBlock.addEventListener(
     "click",
     party01_BlockDoor
 );
-
 
 choiceClose.addEventListener(
     "click",
@@ -2354,41 +2476,10 @@ choiceClose.addEventListener(
 
 function party01_BlockDoor() {
 
-    if (
-        PARTY.current !== 1 ||
-        party01Phase !== "strange"
-    ) {
-        return;
-    }
-
     playClickSound();
 
     choicePanel.classList.remove(
         "active"
-    );
-
-    /*
-     * On remet exactement le fond lift.png
-     * avant de lancer le Good Ending.
-     */
-
-    background.style.opacity =
-        "0";
-
-    setTimeout(
-        () => {
-
-            background.src =
-                ASSETS.backgroundLift;
-
-            background.onload = () => {
-
-                background.style.opacity =
-                    "1";
-            };
-
-        },
-        150
     );
 
     nate.src =
@@ -2400,122 +2491,33 @@ function party01_BlockDoor() {
     party01Phase =
         "goodEnding";
 
-    party01GoodEndingIndex =
-        0;
-
     dialogue.style.display =
         "block";
-
-    setTimeout(
-        party01_ShowGoodEnding,
-        300
-    );
-}
-
-
-/* ============================================================
-   SHOW GOOD ENDING
-   ============================================================ */
-
-function party01_ShowGoodEnding() {
-
-    if (
-        PARTY.current !== 1 ||
-        party01Phase !== "goodEnding"
-    ) {
-        return;
-    }
-
-    const entry =
-        party01GoodEnding[
-            party01GoodEndingIndex
-        ];
-
-    if (!entry) {
-
-        party01_GoToParty02();
-
-        return;
-    }
 
     speaker.textContent =
-        entry.speaker;
+        "Nate";
 
     dialogueText.style.fontStyle =
-        entry.speaker === ""
-            ? "italic"
-            : "normal";
-
-    dialogue.style.display =
-        "block";
+        "normal";
 
     typeDialogue(
-        entry.text
+        "Attendez ! Je vais maintenir la porte."
     );
+
 }
 
 
 /* ============================================================
-   NEXT GOOD ENDING
-   ============================================================ */
-
-function party01_NextGoodEnding() {
-
-    if (
-        PARTY.current !== 1 ||
-        party01Phase !== "goodEnding"
-    ) {
-        return;
-    }
-
-    /*
-     * Premier clic/SPACE :
-     * termine le texte.
-     */
-
-    if (party01Typing) {
-
-        playClickSound();
-
-        clearTimeout(
-            party01Timer
-        );
-
-        party01Timer = null;
-
-        party01Typing = false;
-
-        dialogueText.textContent =
-            party01CurrentText;
-
-        return;
-    }
-
-    playClickSound();
-
-    party01GoodEndingIndex++;
-
-    if (
-        party01GoodEndingIndex >=
-        party01GoodEnding.length
-    ) {
-
-        party01_GoToParty02();
-
-        return;
-    }
-
-    party01_ShowGoodEnding();
-}
-
-
-/* ============================================================
-   GO PARTY 02
+   GO TO PARTY 02
    ============================================================ */
 
 function party01_GoToParty02() {
 
-    PARTY.current = 2;
+    playClickSound();
+
+    party01.classList.remove(
+        "active"
+    );
 
     dialogue.style.display =
         "none";
@@ -2524,24 +2526,8 @@ function party01_GoToParty02() {
         "active"
     );
 
-    nate.style.display =
-        "none";
+    party02_Start();
 
-    party01.classList.remove(
-        "active"
-    );
-
-    background.style.opacity =
-        "0";
-
-    setTimeout(
-        () => {
-
-            party02_Start();
-
-        },
-        500
-    );
 }
 
 
@@ -2551,26 +2537,17 @@ function party01_GoToParty02() {
 
 function party01_LetDoorClose() {
 
-    if (
-        PARTY.current !== 1 ||
-        party01Phase !== "strange"
-    ) {
-        return;
-    }
-
     playClickSound();
 
     choicePanel.classList.remove(
         "active"
     );
 
-    dialogue.style.display =
-        "none";
-
     nate.style.display =
         "none";
 
     party015_Start();
+
 }
 
 
@@ -2600,6 +2577,7 @@ const party015Dialogue = {
         "Tu penses que cette porte peut m'arrêter ?\n\n" +
         "On aurait évité d'en arriver là...\n\n" +
         "Mais tu as préféré laisser la porte se fermer."
+
 };
 
 
@@ -2618,7 +2596,9 @@ function party015_Start() {
     party015Typing =
         false;
 
-    if (party015Timer) {
+    if (
+        party015Timer
+    ) {
 
         clearTimeout(
             party015Timer
@@ -2626,7 +2606,12 @@ function party015_Start() {
 
         party015Timer =
             null;
+
     }
+
+    party02.classList.remove(
+        "active"
+    );
 
     dialogue.style.display =
         "none";
@@ -2635,15 +2620,13 @@ function party015_Start() {
         "active"
     );
 
-    nate.style.display =
-        "none";
+    party02ChoicePanel.classList.remove(
+        "active"
+    );
 
     badEndingGlitch.classList.remove(
         "active"
     );
-
-    badEndingGlitch.style.filter =
-        "";
 
     badEndingScreen.classList.remove(
         "active"
@@ -2655,25 +2638,26 @@ function party015_Start() {
     background.src =
         ASSETS.backgroundLift;
 
-    startIntroMusic();
+    nate.style.display =
+        "none";
+
 
     setTimeout(
         party015_Frame1,
         700
     );
+
 }
 
-
-/* ============================================================
-   FRAME 1
-   ============================================================ */
 
 function party015_Frame1() {
 
     if (
         PARTY.current !== 1.5
     ) {
+
         return;
+
     }
 
     background.src =
@@ -2683,19 +2667,18 @@ function party015_Frame1() {
         party015_Frame2,
         900
     );
+
 }
 
-
-/* ============================================================
-   FRAME 2
-   ============================================================ */
 
 function party015_Frame2() {
 
     if (
         PARTY.current !== 1.5
     ) {
+
         return;
+
     }
 
     background.src =
@@ -2705,19 +2688,18 @@ function party015_Frame2() {
         party015_Frame3,
         700
     );
+
 }
 
-
-/* ============================================================
-   FRAME 3
-   ============================================================ */
 
 function party015_Frame3() {
 
     if (
         PARTY.current !== 1.5
     ) {
+
         return;
+
     }
 
     background.src =
@@ -2727,19 +2709,18 @@ function party015_Frame3() {
         party015_Frame4,
         650
     );
+
 }
 
-
-/* ============================================================
-   FRAME 4
-   ============================================================ */
 
 function party015_Frame4() {
 
     if (
         PARTY.current !== 1.5
     ) {
+
         return;
+
     }
 
     background.src =
@@ -2749,11 +2730,12 @@ function party015_Frame4() {
         party015_NateAppears,
         850
     );
+
 }
 
 
 /* ============================================================
-   NATE ANGRY
+   PARTY 01.5 NATE
    ============================================================ */
 
 function party015_NateAppears() {
@@ -2761,7 +2743,9 @@ function party015_NateAppears() {
     if (
         PARTY.current !== 1.5
     ) {
+
         return;
+
     }
 
     background.src =
@@ -2773,20 +2757,10 @@ function party015_NateAppears() {
     nate.style.display =
         "block";
 
-    nate.classList.remove(
-        "glitching"
-    );
-
-    /*
-     * Force le navigateur à prendre
-     * l'animation comme une nouvelle animation.
-     */
-
-    void nate.offsetWidth;
-
     nate.classList.add(
         "glitching"
     );
+
 
     setTimeout(
         () => {
@@ -2796,26 +2770,26 @@ function party015_NateAppears() {
             );
 
         },
-        500
+        450
     );
+
 
     setTimeout(
         party015_ShowDialogue,
-        1000
+        850
     );
+
 }
 
-
-/* ============================================================
-   PARTY 01.5 DIALOGUE
-   ============================================================ */
 
 function party015_ShowDialogue() {
 
     if (
         PARTY.current !== 1.5
     ) {
+
         return;
+
     }
 
     party015Phase =
@@ -2833,16 +2807,22 @@ function party015_ShowDialogue() {
     party015_TypeText(
         party015Dialogue.text
     );
+
 }
 
 
-function party015_TypeText(text) {
+function party015_TypeText(
+    text
+) {
 
-    if (party015Timer) {
+    if (
+        party015Timer
+    ) {
 
         clearTimeout(
             party015Timer
         );
+
     }
 
     party015Typing =
@@ -2857,16 +2837,20 @@ function party015_TypeText(text) {
     let index =
         0;
 
+
     function write() {
 
         if (
             PARTY.current !== 1.5
         ) {
+
             return;
+
         }
 
         if (
-            index >= text.length
+            index >=
+            text.length
         ) {
 
             party015Typing =
@@ -2876,6 +2860,7 @@ function party015_TypeText(text) {
                 null;
 
             return;
+
         }
 
         dialogueText.textContent +=
@@ -2883,50 +2868,41 @@ function party015_TypeText(text) {
 
         index++;
 
+
         party015Timer =
             setTimeout(
                 write,
                 32
             );
+
     }
 
+
     write();
+
 }
 
-
-/* ============================================================
-   PARTY 01.5 NEXT
-   ============================================================ */
 
 function party015_Next() {
 
     if (
         PARTY.current !== 1.5
     ) {
+
         return;
+
     }
 
-    /*
-     * Pendant la séquence :
-     * aucun clic ne doit la casser.
-     */
 
     if (
-        party015Phase !== "dialogue"
+        party015Typing
     ) {
-        return;
-    }
-
-    /*
-     * Premier clic/SPACE :
-     * finit le texte.
-     */
-
-    if (party015Typing) {
 
         playClickSound();
 
-        if (party015Timer) {
+        if (
+            party015Timer
+        ) {
 
             clearTimeout(
                 party015Timer
@@ -2934,6 +2910,7 @@ function party015_Next() {
 
             party015Timer =
                 null;
+
         }
 
         party015Typing =
@@ -2943,16 +2920,14 @@ function party015_Next() {
             party015Text;
 
         return;
+
     }
 
-    /*
-     * Deuxième clic/SPACE :
-     * jumpscare.
-     */
 
     playClickSound();
 
     party015_StartFinalGlitch();
+
 }
 
 
@@ -2962,12 +2937,6 @@ function party015_Next() {
 
 function party015_StartFinalGlitch() {
 
-    if (
-        PARTY.current !== 1.5
-    ) {
-        return;
-    }
-
     party015Phase =
         "glitch";
 
@@ -2976,12 +2945,6 @@ function party015_StartFinalGlitch() {
 
     nate.style.display =
         "none";
-
-    badEndingGlitch.classList.remove(
-        "active"
-    );
-
-    void badEndingGlitch.offsetWidth;
 
     badEndingGlitch.classList.add(
         "active"
@@ -2993,8 +2956,7 @@ function party015_StartFinalGlitch() {
         manScream.currentTime =
             0;
 
-        manScream
-            .play()
+        manScream.play()
             .catch(() => {});
 
     } catch {}
@@ -3006,7 +2968,9 @@ function party015_StartFinalGlitch() {
             if (
                 PARTY.current !== 1.5
             ) {
+
                 return;
+
             }
 
             badEndingGlitch.style.filter =
@@ -3023,7 +2987,9 @@ function party015_StartFinalGlitch() {
             if (
                 PARTY.current !== 1.5
             ) {
+
                 return;
+
             }
 
             badEndingGlitch.style.filter =
@@ -3040,7 +3006,9 @@ function party015_StartFinalGlitch() {
             if (
                 PARTY.current !== 1.5
             ) {
+
                 return;
+
             }
 
             badEndingGlitch.style.filter =
@@ -3054,12 +3022,6 @@ function party015_StartFinalGlitch() {
     setTimeout(
         () => {
 
-            if (
-                PARTY.current !== 1.5
-            ) {
-                return;
-            }
-
             badEndingGlitch.classList.remove(
                 "active"
             );
@@ -3072,20 +3034,11 @@ function party015_StartFinalGlitch() {
         },
         1200
     );
+
 }
 
 
-/* ============================================================
-   BAD ENDING SCREEN
-   ============================================================ */
-
 function party015_ShowBadEnding() {
-
-    if (
-        PARTY.current !== 1.5
-    ) {
-        return;
-    }
 
     party015Phase =
         "finished";
@@ -3100,6 +3053,7 @@ function party015_ShowBadEnding() {
     console.log(
         "[NATE] BAD ENDING [01.5]"
     );
+
 }
 
 
@@ -3107,35 +3061,870 @@ function party015_ShowBadEnding() {
    PARTY 02
    ============================================================ */
 
+let party02Phase =
+    "intro";
+
+let party02Index =
+    0;
+
+let party02Typing =
+    false;
+
+let party02Timer =
+    null;
+
+let party02CurrentText =
+    "";
+
+
+/* ============================================================
+   PARTY 02 INTRO
+   ============================================================ */
+
+const party02IntroDialogue = [
+
+    {
+        speaker: "",
+        text:
+            "(Je suis dans l'appartement.)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Enfin... je crois.)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Je reconnais cet endroit.)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Mais quelque chose ne va pas.)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Les murs...)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Les meubles...)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Tout semble être à sa place.)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Et pourtant...)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(J'ai l'impression que cet appartement a changé.)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Comme si je n'étais jamais venu ici.)"
+    }
+
+];
+
+
+/* ============================================================
+   PARTY 02 TEA
+   ============================================================ */
+
+const party02TeaDialogue = [
+
+    {
+        speaker: "Nate",
+        text:
+            "Tu veux du thé ?"
+    }
+
+];
+
+
+const party02RefuseDialogue = [
+
+    {
+        speaker: "Nate",
+        text:
+            "Oh..."
+    },
+
+    {
+        speaker: "Nate",
+        text:
+            "Tu n'en veux pas ?"
+    },
+
+    {
+        speaker: "Nate",
+        text:
+            "D'accord..."
+    }
+
+];
+
+
+const party02AcceptDialogue = [
+
+    {
+        speaker: "Nate",
+        text:
+            "Oh !"
+    },
+
+    {
+        speaker: "Nate",
+        text:
+            "Tu acceptes ?"
+    },
+
+    {
+        speaker: "Nate",
+        text:
+            "Je suis contente que tu acceptes."
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Même si je reste sur mes gardes...)"
+    }
+
+];
+
+
+const party02AskDialogue = [
+
+    {
+        speaker: "Nate",
+        text:
+            "Tu veux savoir ce qu'il y a dedans ?"
+    },
+
+    {
+        speaker: "Nate",
+        text:
+            "C'est mon ingrédient secret."
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Son ingrédient secret... ?)"
+    },
+
+    {
+        speaker: "Nate",
+        text:
+            "Mon propre lait."
+    },
+
+    {
+        speaker: "",
+        text:
+            "(...)"
+    },
+
+    {
+        speaker: "",
+        text:
+            "(Le thé a un goût vraiment bizarre.)"
+    },
+
+    {
+        speaker: "Nate",
+        text:
+            "Alors ?"
+    },
+
+    {
+        speaker: "Nate",
+        text:
+            "Tu aimes ?"
+    }
+
+];
+
+
+const party02FinalDialogue = [
+
+    {
+        speaker: "Nate",
+        text:
+            "Bon..."
+    },
+
+    {
+        speaker: "Nate",
+        text:
+            "Tu veux jouer à un jeu ?"
+    }
+
+];
+
+
+/* ============================================================
+   PARTY 02 TYPEWRITER
+   ============================================================ */
+
+function party02_TypeDialogue(
+    text
+) {
+
+    if (
+        party02Timer
+    ) {
+
+        clearTimeout(
+            party02Timer
+        );
+
+    }
+
+    party02Typing =
+        true;
+
+    party02CurrentText =
+        text;
+
+    dialogueText.textContent =
+        "";
+
+    let index =
+        0;
+
+
+    function write() {
+
+        if (
+            PARTY.current !== 2
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            index >=
+            text.length
+        ) {
+
+            party02Typing =
+                false;
+
+            party02Timer =
+                null;
+
+            return;
+
+        }
+
+
+        dialogueText.textContent +=
+            text[index];
+
+        index++;
+
+
+        party02Timer =
+            setTimeout(
+                write,
+                28
+            );
+
+    }
+
+
+    write();
+
+}
+
+
+function party02_ShowDialogue(
+    entry
+) {
+
+    speaker.textContent =
+        entry.speaker;
+
+    dialogueText.style.fontStyle =
+        entry.speaker === ""
+            ? "italic"
+            : "normal";
+
+    dialogue.style.display =
+        "block";
+
+    party02_TypeDialogue(
+        entry.text
+    );
+
+}
+
+
+/* ============================================================
+   PARTY 02 START
+   ============================================================ */
+
 function party02_Start() {
 
     PARTY.current =
         2;
 
+    PARTY.started =
+        true;
+
+    party02Phase =
+        "intro";
+
+    party02Index =
+        0;
+
+    party02Typing =
+        false;
+
+
+    if (
+        party02Timer
+    ) {
+
+        clearTimeout(
+            party02Timer
+        );
+
+        party02Timer =
+            null;
+
+    }
+
+
     party01.classList.remove(
         "active"
     );
-
-    dialogue.style.display =
-        "none";
-
-    choicePanel.classList.remove(
-        "active"
-    );
-
-    nate.style.display =
-        "none";
-
-    background.style.opacity =
-        "0";
 
     party02.classList.add(
         "active"
     );
 
+    choicePanel.classList.remove(
+        "active"
+    );
+
+    party02ChoicePanel.classList.remove(
+        "active"
+    );
+
+    background.style.opacity =
+        "1";
+
+    background.src =
+        ASSETS.backgroundMenu;
+
+    nate.src =
+        ASSETS.nateNormal;
+
+    nate.style.display =
+        "none";
+
+    dialogue.style.display =
+        "block";
+
+
+    party02_ShowDialogue(
+        party02IntroDialogue[0]
+    );
+
+
     console.log(
         "[NATE] PARTY [02] START"
     );
+
+}
+
+
+/* ============================================================
+   NATE APPEARS
+   ============================================================ */
+
+function party02_NateAppears() {
+
+    party02Phase =
+        "tea";
+
+    party02Index =
+        0;
+
+
+    nate.src =
+        ASSETS.nateNormal;
+
+    nate.style.display =
+        "block";
+
+    nate.style.opacity =
+        "0";
+
+
+    requestAnimationFrame(
+        () => {
+
+            nate.style.transition =
+                "opacity .8s ease";
+
+            nate.style.opacity =
+                "1";
+
+        }
+    );
+
+
+    setTimeout(
+        () => {
+
+            if (
+                PARTY.current !== 2
+            ) {
+
+                return;
+
+            }
+
+            party02_ShowDialogue(
+                party02TeaDialogue[0]
+            );
+
+        },
+        500
+    );
+
+}
+
+
+/* ============================================================
+   PARTY 02 TEA CHOICE
+   ============================================================ */
+
+function party02_ShowTeaChoice() {
+
+    dialogue.style.display =
+        "none";
+
+    party02ChoicePanel.classList.add(
+        "active"
+    );
+
+}
+
+
+/* ============================================================
+   CHOICE 1 — REFUSER
+   ============================================================ */
+
+function party02_RefuseTea() {
+
+    playClickSound();
+
+    party02ChoicePanel.classList.remove(
+        "active"
+    );
+
+    nate.src =
+        ASSETS.nateAngry;
+
+    party02Phase =
+        "refuse";
+
+    party02Index =
+        0;
+
+    party02_ShowDialogue(
+        party02RefuseDialogue[0]
+    );
+
+}
+
+
+/* ============================================================
+   CHOICE 2 — ACCEPTER
+   ============================================================ */
+
+function party02_AcceptTea() {
+
+    playClickSound();
+
+    party02ChoicePanel.classList.remove(
+        "active"
+    );
+
+    nate.src =
+        ASSETS.nateStanHappy;
+
+    party02Phase =
+        "accept";
+
+    party02Index =
+        0;
+
+    party02_ShowDialogue(
+        party02AcceptDialogue[0]
+    );
+
+}
+
+
+/* ============================================================
+   CHOICE 3 — DEMANDER
+   ============================================================ */
+
+function party02_AskTea() {
+
+    playClickSound();
+
+    party02ChoicePanel.classList.remove(
+        "active"
+    );
+
+    nate.src =
+        ASSETS.nateSuperHappy;
+
+    party02Phase =
+        "ask";
+
+    party02Index =
+        0;
+
+    party02_ShowDialogue(
+        party02AskDialogue[0]
+    );
+
+}
+
+
+/* ============================================================
+   PARTY 02 BUTTONS
+   ============================================================ */
+
+party02Refuse.addEventListener(
+    "mouseenter",
+    playHoverSound
+);
+
+party02Accept.addEventListener(
+    "mouseenter",
+    playHoverSound
+);
+
+party02Ask.addEventListener(
+    "mouseenter",
+    playHoverSound
+);
+
+
+party02Refuse.addEventListener(
+    "click",
+    party02_RefuseTea
+);
+
+party02Accept.addEventListener(
+    "click",
+    party02_AcceptTea
+);
+
+party02Ask.addEventListener(
+    "click",
+    party02_AskTea
+);
+
+
+/* ============================================================
+   PARTY 02 NEXT
+   ============================================================ */
+
+function party02_Next() {
+
+    if (
+        PARTY.current !== 2
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Premier clic :
+     * termine le texte.
+     */
+
+    if (
+        party02Typing
+    ) {
+
+        playClickSound();
+
+        clearTimeout(
+            party02Timer
+        );
+
+        party02Timer =
+            null;
+
+        party02Typing =
+            false;
+
+        dialogueText.textContent =
+            party02CurrentText;
+
+        return;
+
+    }
+
+
+    playClickSound();
+
+    party02Index++;
+
+
+    /* --------------------------------------------------------
+       INTRO
+       -------------------------------------------------------- */
+
+    if (
+        party02Phase ===
+        "intro"
+    ) {
+
+        if (
+            party02Index <
+            party02IntroDialogue.length
+        ) {
+
+            party02_ShowDialogue(
+                party02IntroDialogue[
+                    party02Index
+                ]
+            );
+
+            return;
+
+        }
+
+
+        party02_NateAppears();
+
+        return;
+
+    }
+
+
+    /* --------------------------------------------------------
+       QUESTION DU THÉ
+       -------------------------------------------------------- */
+
+    if (
+        party02Phase ===
+        "tea"
+    ) {
+
+        party02_ShowTeaChoice();
+
+        return;
+
+    }
+
+
+    /* --------------------------------------------------------
+       REFUS
+       -------------------------------------------------------- */
+
+    if (
+        party02Phase ===
+        "refuse"
+    ) {
+
+        if (
+            party02Index <
+            party02RefuseDialogue.length
+        ) {
+
+            party02_ShowDialogue(
+                party02RefuseDialogue[
+                    party02Index
+                ]
+            );
+
+            return;
+
+        }
+
+
+        party02_StartFinal();
+
+        return;
+
+    }
+
+
+    /* --------------------------------------------------------
+       ACCEPTATION
+       -------------------------------------------------------- */
+
+    if (
+        party02Phase ===
+        "accept"
+    ) {
+
+        if (
+            party02Index <
+            party02AcceptDialogue.length
+        ) {
+
+            party02_ShowDialogue(
+                party02AcceptDialogue[
+                    party02Index
+                ]
+            );
+
+            return;
+
+        }
+
+
+        party02_StartFinal();
+
+        return;
+
+    }
+
+
+    /* --------------------------------------------------------
+       QUESTION SUR LE THÉ
+       -------------------------------------------------------- */
+
+    if (
+        party02Phase ===
+        "ask"
+    ) {
+
+        if (
+            party02Index <
+            party02AskDialogue.length
+        ) {
+
+            party02_ShowDialogue(
+                party02AskDialogue[
+                    party02Index
+                ]
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Après la révélation,
+         * Nate reprend son expression heureuse.
+         */
+
+        nate.src =
+            ASSETS.nateStanHappy;
+
+        party02_StartFinal();
+
+        return;
+
+    }
+
+
+    /* --------------------------------------------------------
+       FINAL
+       -------------------------------------------------------- */
+
+    if (
+        party02Phase ===
+        "final"
+    ) {
+
+        if (
+            party02Index <
+            party02FinalDialogue.length
+        ) {
+
+            party02_ShowDialogue(
+                party02FinalDialogue[
+                    party02Index
+                ]
+            );
+
+            return;
+
+        }
+
+
+        party02_Finished();
+
+    }
+
+}
+
+
+/* ============================================================
+   PARTY 02 FINAL
+   ============================================================ */
+
+function party02_StartFinal() {
+
+    party02Phase =
+        "final";
+
+    party02Index =
+        0;
+
+    party02_ShowDialogue(
+        party02FinalDialogue[0]
+    );
+
+}
+
+
+/* ============================================================
+   PARTY 02 FINISHED
+   ============================================================ */
+
+function party02_Finished() {
+
+    dialogue.style.display =
+        "none";
+
+    nate.style.display =
+        "block";
+
+    console.log(
+        "[NATE] PARTY [02] FINISHED"
+    );
+
 }
 
 
@@ -3147,72 +3936,6 @@ dialogue.addEventListener(
     "click",
     () => {
 
-        if (
-            PARTY.current === 1
-        ) {
-
-            if (
-                party01Phase === "narration" ||
-                party01Phase === "strange"
-            ) {
-
-                party01_NextDialogue();
-
-                return;
-            }
-
-            if (
-                party01Phase === "goodEnding"
-            ) {
-
-                party01_NextGoodEnding();
-
-                return;
-            }
-
-            return;
-        }
-
-
-        if (
-            PARTY.current === 1.5
-        ) {
-
-            party015_Next();
-
-            return;
-        }
-    }
-);
-
-
-/* ============================================================
-   SPACE
-   ============================================================ */
-
-let spaceLocked =
-    false;
-
-document.addEventListener(
-    "keydown",
-    (event) => {
-
-        if (
-            event.code !== "Space"
-        ) {
-            return;
-        }
-
-        event.preventDefault();
-
-        if (spaceLocked) {
-            return;
-        }
-
-        spaceLocked =
-            true;
-
-
         /*
          * PARTY 01
          */
@@ -3221,26 +3944,10 @@ document.addEventListener(
             PARTY.current === 1
         ) {
 
-            if (
-                party01Phase === "narration" ||
-                party01Phase === "strange"
-            ) {
-
-                party01_NextDialogue();
-
-                return;
-            }
-
-            if (
-                party01Phase === "goodEnding"
-            ) {
-
-                party01_NextGoodEnding();
-
-                return;
-            }
+            party01_NextDialogue();
 
             return;
+
         }
 
 
@@ -3255,23 +3962,97 @@ document.addEventListener(
             party015_Next();
 
             return;
+
+        }
+
+
+        /*
+         * PARTY 02
+         */
+
+        if (
+            PARTY.current === 2
+        ) {
+
+            party02_Next();
+
+            return;
+
         }
 
     }
 );
 
 
+/* ============================================================
+   SPACE KEY
+   ============================================================ */
+
+let spaceLocked =
+    false;
+
 document.addEventListener(
-    "keyup",
+    "keydown",
     (event) => {
 
         if (
-            event.code === "Space"
+            event.code !== "Space"
         ) {
 
-            spaceLocked =
-                false;
+            return;
+
         }
+
+        event.preventDefault();
+
+
+        if (
+            spaceLocked
+        ) {
+
+            return;
+
+        }
+
+        spaceLocked =
+            true;
+
+
+        if (
+            PARTY.current === 1
+        ) {
+
+            party01_NextDialogue();
+
+        }
+
+        else if (
+            PARTY.current === 1.5
+        ) {
+
+            party015_Next();
+
+        }
+
+        else if (
+            PARTY.current === 2
+        ) {
+
+            party02_Next();
+
+        }
+
+
+        setTimeout(
+            () => {
+
+                spaceLocked =
+                    false;
+
+            },
+            80
+        );
+
     }
 );
 
@@ -3294,8 +4075,8 @@ nate.style.display =
 
 
 /*
- * Le navigateur autorise la musique
- * après une première interaction.
+ * Le navigateur bloque généralement
+ * l'audio automatique.
  */
 
 document.addEventListener(
@@ -3307,6 +4088,7 @@ document.addEventListener(
         ) {
 
             startMenuMusic();
+
         }
 
     },
@@ -3335,8 +4117,8 @@ window.party01_BlockDoor =
 window.party01_LetDoorClose =
     party01_LetDoorClose;
 
-window.party01_NextGoodEnding =
-    party01_NextGoodEnding;
+window.party01_GoToParty02 =
+    party01_GoToParty02;
 
 window.party015_Start =
     party015_Start;
@@ -3350,25 +4132,37 @@ window.party015_StartFinalGlitch =
 window.party02_Start =
     party02_Start;
 
+window.party02_Next =
+    party02_Next;
+
+window.party02_RefuseTea =
+    party02_RefuseTea;
+
+window.party02_AcceptTea =
+    party02_AcceptTea;
+
+window.party02_AskTea =
+    party02_AskTea;
+
 
 console.log(
     "[NATE] HTML Edition chargée."
 );
 
 console.log(
-    "[NATE] PARTY [00] prête."
+    "[NATE] PARTY 00 prête."
 );
 
 console.log(
-    "[NATE] PARTY [01] prête."
+    "[NATE] PARTY 01 prête."
 );
 
 console.log(
-    "[NATE] PARTY [01.5] prête."
+    "[NATE] PARTY 01.5 prête."
 );
 
 console.log(
-    "[NATE] PARTY [02] prête."
+    "[NATE] PARTY 02 prête."
 );
 
 </script>
