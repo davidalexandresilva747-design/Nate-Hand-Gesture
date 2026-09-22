@@ -1943,7 +1943,7 @@ const party01Dialogue = [
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "Je suis pourtant déjà monté dans cet ascenseur des centaines de fois."
     },
@@ -1955,13 +1955,13 @@ const party01Dialogue = [
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "Peut-être que je suis juste trop fatigué."
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "Oui... c'est sûrement ça."
     },
@@ -1979,7 +1979,7 @@ const party01Dialogue = [
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "J'espère qu'on va bientôt arriver."
     }
@@ -2020,13 +2020,13 @@ const party01Strange = [
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "Euh..."
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "Bonsoir."
     },
@@ -2038,13 +2038,13 @@ const party01Strange = [
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "Je ne crois pas vous avoir déjà vue ici."
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "Vous venez d'emménager dans l'immeuble ?"
     },
@@ -2068,7 +2068,7 @@ const party01Strange = [
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "Vous allez au même étage que moi ?"
     },
@@ -2092,7 +2092,7 @@ const party01Strange = [
     },
 
     {
-        speaker: "Nate",
+        speaker: "Geliebte Tochter",
         text:
             "Euh... vous voulez entrer ?"
     },
@@ -2478,32 +2478,51 @@ function party01_BlockDoor() {
 
     playClickSound();
 
-    choicePanel.classList.remove(
-        "active"
-    );
+    choicePanel.classList.remove("active");
 
-    nate.src =
-        ASSETS.nateHappy;
+    // Remettre immédiatement le fond de l'ascenseur fermé
+    background.style.opacity = "0";
 
-    nate.style.display =
-        "block";
+    const closedLift = new Image();
 
-    party01Phase =
-        "goodEnding";
+    closedLift.onload = () => {
 
-    dialogue.style.display =
-        "block";
+        // Vérification pour éviter une modification si on a changé de PARTY
+        if (PARTY.current !== 1) {
+            return;
+        }
 
-    speaker.textContent =
-        "Nate";
+        background.src = ASSETS.backgroundLift;
+        background.style.opacity = "1";
+    };
 
-    dialogueText.style.fontStyle =
-        "normal";
+    closedLift.onerror = () => {
+        console.error(
+            "[PARTY 01] Impossible de charger lift.png"
+        );
+
+        // Même en cas d'erreur, on tente de remettre le fond
+        background.src = ASSETS.backgroundLift;
+        background.style.opacity = "1";
+    };
+
+    closedLift.src = ASSETS.backgroundLift;
+
+    // Sprite de Nate
+    nate.src = ASSETS.nateHappy;
+    nate.style.display = "block";
+
+    party01Phase = "goodEnding";
+
+    dialogue.style.display = "block";
+
+    speaker.textContent = "Nate";
+
+    dialogueText.style.fontStyle = "normal";
 
     typeDialogue(
-        "Attendez ! Je vais maintenir la porte."
+        "Merci de m'avoir laissé monter."
     );
-
 }
 
 
@@ -2568,17 +2587,27 @@ let party015Text =
     "";
 
 
-const party015Dialogue = {
+const party01BadEndingDialogue = [
 
-    speaker:
-        "Nate",
+    {
+        speaker: "Nate",
+        text:
+            "Tu penses que cette porte peut m'arrêter ?"
+    },
 
-    text:
-        "Tu penses que cette porte peut m'arrêter ?\n\n" +
-        "On aurait évité d'en arriver là...\n\n" +
-        "Mais tu as préféré laisser la porte se fermer."
+    {
+        speaker: "Nate",
+        text:
+            "On aurait évité d'en arriver là..."
+    },
 
-};
+    {
+        speaker: "Nate",
+        text:
+            "Mais tu as préféré laisser la porte se fermer."
+    }
+
+];
 
 
 /* ============================================================
